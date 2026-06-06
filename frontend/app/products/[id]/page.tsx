@@ -86,7 +86,7 @@ export default function ProductDetailPage() {
           <div className="space-y-3">
             <div className="relative rounded-2xl overflow-hidden" style={{ height: 480, background: "#0d1117" }}>
               {selectedImage ? (
-                <Image src={`${apiUrl}${selectedImage.url}`} alt={product.name}
+                <Image src={`${apiUrl}${selectedImage.url}`} alt={product.name || "Product image"}
                   fill className="object-cover" priority />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-8xl opacity-10">✈</div>

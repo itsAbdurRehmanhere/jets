@@ -21,6 +21,15 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return res.json();
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────
+// Backend uses "title" for product name — normalize to "name" throughout
+function normalizeProduct(p: Record<string, unknown>): Product {
+  return {
+    ...(p as unknown as Product),
+    name: (p.name ?? p.title ?? "") as string,
+  };
+}
+
 // ── Namespaced API object ──────────────────────────────────────────────
 export const api = {
   auth: {
@@ -46,17 +55,17 @@ export const api = {
           .map(([k, v]) => [k, String(v)])
       ).toString();
       return request<ProductListResponse>(`/products${qs ? `?${qs}` : ""}`).then((r) => {
-        // Normalize: backend may return { data, total } or { products, total }
+        // Normalize: backend returns { data, total }, field is "title" not "name"
         const raw = r as Record<string, unknown>;
-        const items = (raw.products ?? raw.data ?? []) as Product[];
+        const items = ((raw.products ?? raw.data ?? []) as Record<string, unknown>[]).map(normalizeProduct);
         return { products: items, total: (raw.total as number) ?? items.length, skip: (raw.skip as number) ?? 0, limit: (raw.limit as number) ?? items.length };
       });
     },
 
     get: (id: number) =>
       request<Product | { data: Product }>(`/products/${id}`).then((r) => {
-        if (r && "data" in (r as object)) return (r as { data: Product }).data;
-        return r as Product;
+        const raw = ("data" in (r as object) ? (r as { data: Product }).data : r) as Record<string, unknown>;
+        return normalizeProduct(raw);
       }),
   },
 

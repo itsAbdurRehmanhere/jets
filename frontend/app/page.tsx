@@ -149,7 +149,7 @@ export default function HomePage() {
                 className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40">
                 <div className="relative aspect-square overflow-hidden" style={{ background: "#0d1117" }}>
                   {product.images?.[0] ? (
-                    <Image src={`http://localhost:8000${product.images[0].url}`} alt={product.name}
+                    <Image src={`http://localhost:8000${product.images[0].url}`} alt={product.name || "Product image"}
                       fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-6xl opacity-20">✈</div>
