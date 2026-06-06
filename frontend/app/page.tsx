@@ -31,26 +31,22 @@ export default function HomePage() {
   return (
     <div style={{ background: "var(--bg-primary)" }}>
       {/* HERO */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background jet image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/hero-jets.jpg"
-            alt="PAF Fighter Jets"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-        {/* Dark overlay — bottom heavy so text stays readable */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{
+          backgroundImage: "url('/hero-jets.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+        {/* Dark overlay — keeps text readable over the image */}
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(to bottom, rgba(5,8,16,0.55) 0%, rgba(5,8,16,0.75) 50%, rgba(5,8,16,0.97) 100%)"
+          background: "linear-gradient(to bottom, rgba(5,8,16,0.45) 0%, rgba(5,8,16,0.60) 50%, rgba(5,8,16,0.92) 100%)"
         }} />
-        {/* Gold tint glow */}
-        <div className="absolute inset-0 opacity-15" style={{
-          backgroundImage: `radial-gradient(ellipse at 30% 60%, #c9a84c33 0%, transparent 55%)`
+        {/* Gold glow accent */}
+        <div className="absolute inset-0" style={{
+          background: "radial-gradient(ellipse at 30% 70%, rgba(201,168,76,0.12) 0%, transparent 60%)"
         }} />
-        {/* Subtle grid overlay */}
+        {/* Grid overlay */}
         <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: `linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)`,
           backgroundSize: "60px 60px"
