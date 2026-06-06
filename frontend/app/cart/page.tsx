@@ -97,14 +97,14 @@ export default function CartPage() {
                 <div className="flex items-center gap-3 shrink-0">
                   <div className="flex items-center rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                     <button onClick={() => updateItem(item.id, item.quantity - 1)}
-                      className="px-3 py-2 text-sm transition-colors hover:bg-white/5"
+                      className="px-4 py-3 text-sm transition-colors hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       style={{ color: "var(--text-muted)" }}>−</button>
-                    <span className="px-3 py-2 text-sm font-bold"
+                    <span className="px-3 py-3 text-sm font-bold min-w-[2.5rem] text-center"
                       style={{ color: "var(--text-primary)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)" }}>
                       {item.quantity}
                     </span>
                     <button onClick={() => updateItem(item.id, item.quantity + 1)}
-                      className="px-3 py-2 text-sm transition-colors hover:bg-white/5"
+                      className="px-4 py-3 text-sm transition-colors hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       style={{ color: "var(--text-muted)" }}>+</button>
                   </div>
                   <button onClick={() => removeItem(item.id)}
@@ -133,8 +133,8 @@ export default function CartPage() {
               <div className="space-y-3 mb-5">
                 {cartItems.map(item => (
                   <div key={item.id} className="flex justify-between text-sm">
-                    <span className="truncate mr-2" style={{ color: "var(--text-muted)" }}>
-                      {item.product?.name?.slice(0, 25) || `Item`} × {item.quantity}
+                    <span className="line-clamp-1 mr-2" style={{ color: "var(--text-muted)" }}>
+                      {item.product?.name || `Item`} × {item.quantity}
                     </span>
                     <span style={{ color: "var(--text-primary)" }}>
                       PKR {(Number(item.price) * item.quantity).toLocaleString()}

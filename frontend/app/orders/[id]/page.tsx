@@ -93,7 +93,7 @@ export default function OrderDetailPage() {
         {order.status !== "cancelled" && (
           <div className="card rounded-2xl p-6">
             <h3 className="text-xs font-bold tracking-widest mb-5" style={{ color: "var(--gold)" }}>ORDER STATUS</h3>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5 sm:gap-1 overflow-x-auto pb-1">
               {statusSteps.map((step, i) => (
                 <div key={step} className="flex items-center flex-1">
                   <div className="flex flex-col items-center">

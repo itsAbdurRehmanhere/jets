@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Image gallery */}
           <div className="space-y-3">
-            <div className="relative rounded-2xl overflow-hidden" style={{ height: 480, background: "#0d1117" }}>
+            <div className="relative rounded-2xl overflow-hidden aspect-square w-full" style={{ background: "#0d1117" }}>
               {selectedImage ? (
                 <Image src={`${apiUrl}${selectedImage.url}`} alt={product.name || "Product image"}
                   fill className="object-cover" priority />
@@ -93,7 +93,7 @@ export default function ProductDetailPage() {
               )}
             </div>
             {product.images && product.images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="flex flex-wrap sm:flex-nowrap gap-2 overflow-x-auto pb-1">
                 {product.images.map(img => (
                   <button key={img.id} onClick={() => setSelectedImage(img)}
                     className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden transition-all"
@@ -146,7 +146,7 @@ export default function ProductDetailPage() {
 
             {/* Quantity + Add to Cart */}
             {inStock && (
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <div className="flex items-center rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                   <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     className="px-4 py-3 transition-colors hover:bg-white/5 text-lg font-bold"

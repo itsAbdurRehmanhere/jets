@@ -58,7 +58,7 @@ export default function HomePage() {
             <span>★</span> OFFICIAL PAF COLLECTIBLES STORE <span>★</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6"
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6"
             style={{ lineHeight: 1.05 }}>
             <span style={{ color: "var(--text-primary)" }}>ELITE</span>
             <br />
@@ -67,24 +67,24 @@ export default function HomePage() {
             <span style={{ color: "var(--text-primary)" }}>COLLECTIBLES</span>
           </h1>
 
-          <p className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          <p className="text-base md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed px-2"
             style={{ color: "var(--text-muted)" }}>
             Handcrafted fighter jet models, precision sculptures, and prestigious trophies.
             Authentic PAF memorabilia for aviation enthusiasts and proud patriots.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/products" className="btn-gold px-10 py-4 rounded-xl text-base font-bold tracking-widest uppercase">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full px-4 sm:px-0">
+            <Link href="/products" className="btn-gold w-full sm:w-auto px-10 py-4 rounded-xl text-sm font-bold tracking-widest uppercase text-center">
               Shop Collection
             </Link>
             <Link href="/products?category_id=1"
-              className="px-10 py-4 rounded-xl text-base font-semibold tracking-wider uppercase border transition-colors hover:bg-white/5"
+              className="w-full sm:w-auto px-10 py-4 rounded-xl text-sm font-semibold tracking-wider uppercase border transition-colors hover:bg-white/5 text-center"
               style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
               Jet Models ✈
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-12 mt-20">
+          <div className="flex items-center justify-center gap-8 sm:gap-12 mt-16 sm:mt-20">
             {[
               { val: "100+", label: "Products" },
               { val: "500+", label: "Happy Customers" },
@@ -111,7 +111,7 @@ export default function HomePage() {
           <div className="divider-gold mx-auto mt-4" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {(categories.length > 0 ? categories : fallbackCategories).map((cat, i) => (
             <Link key={cat.id}
               href={`/products?category_id=${cat.id}`}
@@ -152,7 +152,7 @@ export default function HomePage() {
               style={{ color: "var(--text-muted)" }}>VIEW ALL →</Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {featured.map(product => (
               <Link key={product.id} href={`/products/${product.id}`}
                 className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40">

@@ -69,7 +69,7 @@ export default function ProductsPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <aside className="w-full lg:w-64 shrink-0">
-            <div className="card rounded-2xl p-6 sticky top-24">
+            <div className="card rounded-2xl p-4 sm:p-6 sticky top-24">
               <h3 className="text-xs font-bold tracking-widest mb-5" style={{ color: "var(--gold)" }}>FILTER & SEARCH</h3>
 
               {/* Search */}

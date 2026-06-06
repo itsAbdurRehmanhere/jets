@@ -62,17 +62,17 @@ export default function AdminPage() {
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-7xl mx-auto px-4 py-10 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <p className="text-xs tracking-widest mb-2" style={{ color: "var(--gold)" }}>PAF STORE</p>
-            <h1 className="text-4xl font-black" style={{ color: "var(--text-primary)" }}>ADMIN DASHBOARD</h1>
+            <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>ADMIN DASHBOARD</h1>
           </div>
-          <div className="flex gap-3">
-            <Link href="/admin/orders" className="px-4 py-2 rounded-lg text-sm font-bold tracking-wider transition-colors hover:bg-white/5"
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <Link href="/admin/orders" className="px-4 py-2.5 rounded-lg text-sm font-bold tracking-wider transition-colors hover:bg-white/5 text-center"
               style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}>
               Manage Orders
             </Link>
-            <Link href="/admin/products" className="btn-gold px-4 py-2 rounded-lg text-sm font-bold tracking-wider">
+            <Link href="/admin/products" className="btn-gold px-4 py-2.5 rounded-lg text-sm font-bold tracking-wider text-center">
               Manage Products
             </Link>
           </div>
@@ -89,7 +89,7 @@ export default function AdminPage() {
         ) : stats ? (
           <div className="space-y-8">
             {/* KPI Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
               {[
                 { label: "TOTAL ORDERS", value: stats.orders.total, icon: "📦", color: "#60a5fa" },
                 { label: "TOTAL REVENUE", value: `PKR ${Number(stats.revenue.total).toLocaleString()}`, icon: "💰", color: "var(--gold)" },

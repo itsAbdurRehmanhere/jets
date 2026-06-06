@@ -92,7 +92,7 @@ export default function CheckoutPage() {
                     <input name="shipping_address" required value={form.shipping_address} onChange={handleChange}
                       placeholder="House/Street/Area" className="input-dark" />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>CITY *</label>
                       <input name="shipping_city" required value={form.shipping_city} onChange={handleChange}
@@ -152,8 +152,8 @@ export default function CheckoutPage() {
               <div className="space-y-3 mb-5">
                 {cartItems.map(item => (
                   <div key={item.id} className="flex justify-between text-sm">
-                    <span className="truncate mr-2" style={{ color: "var(--text-muted)" }}>
-                      {item.product?.name?.slice(0, 22) || "Item"} × {item.quantity}
+                    <span className="line-clamp-1 mr-2" style={{ color: "var(--text-muted)" }}>
+                      {item.product?.name || "Item"} × {item.quantity}
                     </span>
                     <span style={{ color: "var(--text-primary)" }}>
                       PKR {(Number(item.price) * item.quantity).toLocaleString()}

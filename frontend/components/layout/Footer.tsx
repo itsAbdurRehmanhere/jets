@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer style={{ background: "#050810", borderTop: "1px solid var(--border)" }}>
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
@@ -73,7 +73,7 @@ export default function Footer() {
 
         <div style={{ height: "1px", background: "var(--border)", marginBottom: 24 }} />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 text-xs text-center sm:text-left"
           style={{ color: "var(--text-muted)" }}>
           <p>© {new Date().getFullYear()} PAF Store. All rights reserved.</p>
           <p className="tracking-wider">

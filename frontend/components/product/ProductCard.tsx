@@ -86,7 +86,7 @@ export default function ProductCard({ product }: Props) {
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0 || adding}
-            className="px-4 py-2 rounded-lg text-xs font-bold tracking-wider transition-all disabled:opacity-40"
+            className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all disabled:opacity-40 min-h-[44px]"
             style={
               added
                 ? { background: "#22c55e", color: "white" }

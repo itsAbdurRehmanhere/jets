@@ -110,7 +110,7 @@ export default function Navbar() {
                 </span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-2xl py-1 z-50"
+                <div className="absolute right-0 mt-2 w-48 min-w-[180px] rounded-xl shadow-2xl py-1 z-50"
                   style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
                   <Link href="/orders" onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
