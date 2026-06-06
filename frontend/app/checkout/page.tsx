@@ -73,13 +73,13 @@ export default function CheckoutPage() {
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-5xl mx-auto px-4 py-10">
-          <p className="text-xs tracking-widest mb-2" style={{ color: "var(--gold)" }}>PAF STORE</p>
-          <h1 className="text-4xl font-black" style={{ color: "var(--text-primary)" }}>CHECKOUT</h1>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <p className="text-xs tracking-widest mb-2 uppercase" style={{ color: "var(--gold)" }}>PAF Store</p>
+          <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>CHECKOUT</h1>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Form */}
           <div className="flex-1">

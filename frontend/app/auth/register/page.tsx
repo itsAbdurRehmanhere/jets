@@ -30,7 +30,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative"
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-12 relative"
       style={{ background: "var(--bg-primary)" }}>
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
         background: "radial-gradient(ellipse at center, #c9a84c30, transparent 60%)"
