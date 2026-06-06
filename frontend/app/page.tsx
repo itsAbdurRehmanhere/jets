@@ -32,12 +32,25 @@ export default function HomePage() {
     <div style={{ background: "var(--bg-primary)" }}>
       {/* HERO */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background jet image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-jets.jpg"
+            alt="PAF Fighter Jets"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        {/* Dark overlay — bottom heavy so text stays readable */}
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(135deg, #050810 0%, #0a0e1a 40%, #0d1520 70%, #050810 100%)"
+          background: "linear-gradient(to bottom, rgba(5,8,16,0.55) 0%, rgba(5,8,16,0.75) 50%, rgba(5,8,16,0.97) 100%)"
         }} />
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `radial-gradient(ellipse at 20% 50%, #c9a84c22 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, #1e3a5f33 0%, transparent 50%)`
+        {/* Gold tint glow */}
+        <div className="absolute inset-0 opacity-15" style={{
+          backgroundImage: `radial-gradient(ellipse at 30% 60%, #c9a84c33 0%, transparent 55%)`
         }} />
+        {/* Subtle grid overlay */}
         <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: `linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)`,
           backgroundSize: "60px 60px"
