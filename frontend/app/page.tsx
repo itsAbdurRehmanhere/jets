@@ -15,7 +15,8 @@ export default function HomePage() {
   }, []);
 
   const categoryIcons: Record<string, string> = {
-    "Jet Models": "✈", "Sculptures": "🦅", "Trophies": "🏆", "Shields": "🛡",
+    "Jet Models": "✈", "Fighter Jets": "✈", "Sculptures": "🦅", "Trophies": "🏆",
+    "Shields": "🛡", "Accessories": "🎖", "Apparel": "👕", "Mugs": "☕",
   };
 
   const fallbackCategories = [
@@ -93,30 +94,32 @@ export default function HomePage() {
 
       {/* ── CATEGORIES ── */}
       <section style={{ background: "#0a0e1a" }} className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-xs tracking-widest mb-3 uppercase" style={{ color: "#c9a84c" }}>Browse by Category</p>
             <h2 className="text-3xl md:text-5xl font-black" style={{ color: "#f1f5f9" }}>OUR COLLECTIONS</h2>
             <div className="divider-gold mx-auto mt-4" />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {(categories.length > 0 ? categories : fallbackCategories).map((cat, i) => (
               <Link key={cat.id} href={`/products?category_id=${cat.id}`}
                 className="card group relative overflow-hidden rounded-2xl p-6 md:p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1"
                 style={{ background: "#141b2d" }}>
-                <div className="text-4xl md:text-5xl mb-3">{categoryIcons[cat.name] || fallbackCategories[i % 4]?.icon || "✦"}</div>
-                <h3 className="font-bold tracking-wider uppercase text-xs md:text-sm" style={{ color: "#f1f5f9" }}>{cat.name}</h3>
+                <div className="text-4xl md:text-5xl mb-4">
+                  {categoryIcons[cat.name] || fallbackCategories[i % 4]?.icon || "✦"}
+                </div>
+                <h3 className="font-bold tracking-wider uppercase text-xs md:text-sm mb-2" style={{ color: "#f1f5f9" }}>{cat.name}</h3>
                 {"desc" in cat && (
-                  <p className="text-xs mt-2 leading-relaxed hidden sm:block" style={{ color: "#94a3b8" }}>
+                  <p className="text-xs leading-relaxed hidden sm:block" style={{ color: "#94a3b8" }}>
                     {(cat as { desc: string }).desc}
                   </p>
                 )}
                 {"description" in cat && (cat as Category).description && (
-                  <p className="text-xs mt-2 leading-relaxed hidden sm:block" style={{ color: "#94a3b8" }}>
+                  <p className="text-xs leading-relaxed hidden sm:block" style={{ color: "#94a3b8" }}>
                     {(cat as Category).description}
                   </p>
                 )}
-                <div className="mt-3 text-xs tracking-widest opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#c9a84c" }}>SHOP NOW →</div>
+                <div className="mt-4 text-xs tracking-widest opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#c9a84c" }}>SHOP NOW →</div>
               </Link>
             ))}
           </div>
@@ -125,18 +128,15 @@ export default function HomePage() {
 
       {/* ── FEATURED PRODUCTS ── */}
       <section style={{ background: "#111827" }} className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-12">
-            <div>
-              <p className="text-xs tracking-widest mb-2 uppercase" style={{ color: "#c9a84c" }}>Handpicked for You</p>
-              <h2 className="text-3xl md:text-5xl font-black" style={{ color: "#f1f5f9" }}>FEATURED PIECES</h2>
-              <div className="divider-gold mt-4" />
-            </div>
-            <Link href="/products" className="text-xs tracking-widest transition-colors hover:text-yellow-400 self-start sm:self-end pb-1"
-              style={{ color: "#94a3b8" }}>VIEW ALL →</Link>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {/* ✅ Centered heading — consistent with all other sections */}
+          <div className="text-center mb-12">
+            <p className="text-xs tracking-widest mb-3 uppercase" style={{ color: "#c9a84c" }}>Handpicked for You</p>
+            <h2 className="text-3xl md:text-5xl font-black" style={{ color: "#f1f5f9" }}>FEATURED PIECES</h2>
+            <div className="divider-gold mx-auto mt-4" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {featured.map(product => (
               <Link key={product.id} href={`/products/${product.id}`}
                 className="group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 flex flex-col"
@@ -145,7 +145,8 @@ export default function HomePage() {
                   {product.images?.[0] ? (
                     <Image src={`http://localhost:8000${product.images[0].url}`}
                       alt={product.name || "Product"} fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      unoptimized />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-6xl" style={{ color: "#1e2d45" }}>✈</div>
                   )}
@@ -181,7 +182,7 @@ export default function HomePage() {
 
       {/* ── WHY US ── */}
       <section style={{ background: "#0a0e1a" }} className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-xs tracking-widest mb-3 uppercase" style={{ color: "#c9a84c" }}>Why Choose Us</p>
             <h2 className="text-3xl md:text-5xl font-black" style={{ color: "#f1f5f9" }}>THE PAF STORE PROMISE</h2>
@@ -191,7 +192,7 @@ export default function HomePage() {
             {[
               { icon: "🎖", title: "AUTHENTICITY", desc: "Every piece is handcrafted with precision, capturing the spirit and detail of PAF aviation heritage." },
               { icon: "✈", title: "PREMIUM QUALITY", desc: "From crystal sculptures to die-cast jet models — only the finest materials and craftsmanship." },
-              { icon: "📦", title: "SECURE DELIVERY", desc: "All items carefully packaged and shipped with tracking across Pakistan. Free shipping over PKR 10,000." },
+              { icon: "📦", title: "SECURE DELIVERY", desc: "All items carefully packaged and shipped with tracking across Pakistan. Free shipping over PKR 5,000." },
             ].map(f => (
               <div key={f.title} className="rounded-2xl p-8 flex flex-col items-center text-center"
                 style={{ background: "#141b2d", border: "1px solid #1e2d45" }}>
@@ -218,7 +219,7 @@ export default function HomePage() {
             Contact us on WhatsApp for custom orders and bulk pricing.
           </p>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-xs sm:max-w-none">
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/923207331147" target="_blank" rel="noopener noreferrer"
               className="btn-gold px-10 py-4 rounded-xl text-sm font-bold tracking-wider inline-flex items-center justify-center gap-2">
               💬 Chat on WhatsApp
             </a>

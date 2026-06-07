@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="hidden md:block text-xs text-center py-1.5"
         style={{ background: "#0d1117", borderBottom: "1px solid #1e2d45" }}>
         <span style={{ color: "var(--gold)", letterSpacing: "0.1em" }}>
-          ✈ FREE SHIPPING ON ORDERS OVER PKR 10,000 &nbsp;|&nbsp; ORDER VIA WHATSAPP: +92-XXX-XXXXXXX
+          ✈ FREE SHIPPING ON ORDERS OVER PKR 5,000 &nbsp;|&nbsp; ORDER VIA WHATSAPP: +92 320 7331147
         </span>
       </div>
 

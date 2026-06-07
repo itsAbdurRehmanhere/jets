@@ -59,7 +59,7 @@ export default function OrderDetailPage() {
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <div className="max-w-3xl mx-auto px-6 lg:px-8 py-10">
           <Link href="/orders" className="text-xs tracking-widest hover:text-yellow-400 transition-colors mb-4 block"
             style={{ color: "var(--text-muted)" }}>← BACK TO ORDERS</Link>
           <div className="flex items-center gap-4">
@@ -77,7 +77,7 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <div className="max-w-3xl mx-auto px-6 lg:px-8 py-8 space-y-6">
         {/* Just placed banner */}
         {justPlaced && (
           <div className="rounded-2xl p-6 text-center" style={{ background: "#0d1b2a", border: "1px solid #1e3a5f" }}>

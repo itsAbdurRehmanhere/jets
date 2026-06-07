@@ -31,13 +31,14 @@ export default function OrdersPage() {
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-          <p className="text-xs tracking-widest mb-2 uppercase" style={{ color: "var(--gold)" }}>PAF Store</p>
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-10 text-center">
+          <p className="text-xs tracking-widest mb-3 uppercase" style={{ color: "var(--gold)" }}>PAF Store</p>
           <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>MY ORDERS</h1>
+          <div className="divider-gold mx-auto mt-4" />
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
