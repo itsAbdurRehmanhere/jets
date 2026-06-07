@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
@@ -13,16 +13,36 @@ export default function CheckoutPage() {
   const { cartItems, totalPrice, refreshCart } = useCart();
 
   const [form, setForm] = useState({
+    customer_name: "",
+    customer_email: "",
+    customer_phone: "",
     shipping_address: "",
     shipping_city: "",
     shipping_country: "Pakistan",
-    phone: "",
     notes: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+  // Pre-fill from profile
+  useEffect(() => {
+    if (!user) return;
+    api.profile.get().then((p) => {
+      setForm((f) => ({
+        ...f,
+        customer_name: p.username || "",
+        customer_email: p.email || "",
+        customer_phone: p.phone || "",
+        shipping_address: p.address || "",
+        shipping_city: p.city || "",
+        shipping_country: p.country || "Pakistan",
+      }));
+    }).catch(() => {
+      setForm((f) => ({ ...f, customer_email: "" }));
+    });
+  }, [user]);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
@@ -33,10 +53,14 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const order = await api.orders.checkout({
+        customer_name: form.customer_name,
+        customer_email: form.customer_email,
+        customer_phone: form.customer_phone,
         shipping_address: form.shipping_address,
         shipping_city: form.shipping_city,
         shipping_country: form.shipping_country,
         notes: form.notes || undefined,
+        send_confirmation_email: false,
       });
       await refreshCart();
       router.push(`/orders/${order.id}?placed=1`);
@@ -84,11 +108,37 @@ export default function CheckoutPage() {
           {/* Form */}
           <div className="flex-1">
             <form onSubmit={handleSubmit} className="space-y-6">
+
+              {/* Contact Info */}
+              <div className="card rounded-2xl p-6">
+                <h3 className="text-xs font-bold tracking-widest mb-5" style={{ color: "var(--gold)" }}>CONTACT INFORMATION</h3>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>FULL NAME *</label>
+                      <input name="customer_name" required value={form.customer_name} onChange={handleChange}
+                        placeholder="Your full name" className="input-dark" />
+                    </div>
+                    <div>
+                      <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>EMAIL *</label>
+                      <input name="customer_email" type="email" required value={form.customer_email} onChange={handleChange}
+                        placeholder="your@email.com" className="input-dark" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>PHONE NUMBER *</label>
+                    <input name="customer_phone" required value={form.customer_phone} onChange={handleChange}
+                      placeholder="+92 320 7331147" className="input-dark" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Shipping Info */}
               <div className="card rounded-2xl p-6">
                 <h3 className="text-xs font-bold tracking-widest mb-5" style={{ color: "var(--gold)" }}>SHIPPING INFORMATION</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>FULL ADDRESS *</label>
+                    <label className="block text-xs tracking-widests mb-2" style={{ color: "var(--text-muted)" }}>FULL ADDRESS *</label>
                     <input name="shipping_address" required value={form.shipping_address} onChange={handleChange}
                       placeholder="House/Street/Area" className="input-dark" />
                   </div>
@@ -103,11 +153,6 @@ export default function CheckoutPage() {
                       <input name="shipping_country" value={form.shipping_country} onChange={handleChange}
                         className="input-dark" />
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>PHONE NUMBER *</label>
-                    <input name="phone" required value={form.phone} onChange={handleChange}
-                      placeholder="+92 300 1234567" className="input-dark" />
                   </div>
                   <div>
                     <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>ORDER NOTES (OPTIONAL)</label>
@@ -162,15 +207,33 @@ export default function CheckoutPage() {
                 ))}
               </div>
               <div style={{ height: "1px", background: "var(--border)", marginBottom: 16 }} />
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm" style={{ color: "var(--text-muted)" }}>Subtotal</span>
+                <span className="font-semibold" style={{ color: "var(--text-primary)" }}>PKR {totalPrice.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm" style={{ color: "var(--text-muted)" }}>Shipping</span>
+                <span className="text-sm font-semibold" style={{ color: totalPrice >= 5000 ? "#22c55e" : "var(--text-primary)" }}>
+                  {totalPrice >= 5000 ? "FREE" : "Calculated at delivery"}
+                </span>
+              </div>
+              <div style={{ height: "1px", background: "var(--border)", marginBottom: 16 }} />
               <div className="flex justify-between items-center">
                 <span className="font-bold tracking-wider text-sm" style={{ color: "var(--text-primary)" }}>TOTAL</span>
                 <span className="text-2xl font-black text-gold-gradient">
                   PKR {totalPrice.toLocaleString()}
                 </span>
               </div>
-              <p className="text-xs mt-4" style={{ color: "var(--text-muted)" }}>
-                Free shipping on orders over PKR 10,000
-              </p>
+              {totalPrice < 5000 && (
+                <p className="text-xs mt-4 text-center" style={{ color: "var(--gold)" }}>
+                  Add PKR {(5000 - totalPrice).toLocaleString()} more for free delivery!
+                </p>
+              )}
+              {totalPrice >= 5000 && (
+                <p className="text-xs mt-4 text-center" style={{ color: "#22c55e" }}>
+                  ✓ You qualify for free delivery!
+                </p>
+              )}
             </div>
           </div>
         </div>
