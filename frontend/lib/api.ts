@@ -52,7 +52,7 @@ function normalizeOrder(o: Record<string, unknown>): Order {
     total_amount: (o.total_amount ?? o.total ?? 0) as number,
     notes: (o.notes ?? o.customer_notes) as string | undefined,
     items: (o.items as OrderItem[] | undefined)?.map((item) => {
-      const i = item as Record<string, unknown>;
+      const i = item as unknown as Record<string, unknown>;
       return {
         ...item,
         price: (i.price ?? i.product_price ?? i.unit_price ?? 0) as number,
@@ -86,7 +86,7 @@ export const api = {
           .map(([k, v]) => [k, String(v)])
       ).toString();
       return request<ProductListResponse>(`/products${qs ? `?${qs}` : ""}`).then((r) => {
-        const raw = r as Record<string, unknown>;
+        const raw = r as unknown as Record<string, unknown>;
         const items = ((raw.products ?? raw.data ?? []) as Record<string, unknown>[]).map(normalizeProduct);
         return { products: items, total: (raw.total as number) ?? items.length, skip: (raw.skip as number) ?? 0, limit: (raw.limit as number) ?? items.length };
       });
@@ -120,7 +120,7 @@ export const api = {
         return {
           id: (raw.cart_id ?? raw.id ?? 0) as number,
           items: ((raw.items ?? []) as CartItem[]).map((item) => {
-            const i = item as Record<string, unknown>;
+            const i = item as unknown as Record<string, unknown>;
             return {
               ...item,
               price: (i.price ?? i.product_price ?? i.unit_price ?? 0) as number,
@@ -209,7 +209,7 @@ export const api = {
 
       create: (data: { title: string; description?: string; price: number; stock: number; size?: string; category_id?: number }) =>
         request<{ data: Product }>("/products", { method: "POST", body: JSON.stringify(data) })
-          .then((r) => normalizeProduct((r.data ?? r) as Record<string, unknown>)),
+          .then((r) => normalizeProduct((r.data ?? r) as unknown as Record<string, unknown>)),
 
       update: (id: number, data: Partial<{ title: string; description: string; price: number; stock: number; size: string; category_id: number }>) =>
         request<{ data: Product }>(`/products/${id}`, { method: "PUT", body: JSON.stringify(data) })
