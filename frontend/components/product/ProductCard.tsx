@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Product } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 
 interface Props {
@@ -12,17 +14,31 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (product.stock === 0) return;
+
+    // Not logged in → redirect to login
+    if (!user) {
+      router.push("/auth/login");
+      return;
+    }
+
     setAdding(true);
     try {
       await addToCart(product.id, 1);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      if (msg === "LOGIN_REQUIRED") {
+        router.push("/auth/login");
+      }
     } finally {
       setAdding(false);
     }
@@ -32,26 +48,31 @@ export default function ProductCard({ product }: Props) {
     ? `http://localhost:8000${product.images[0].url}`
     : null;
 
+  const isOutOfStock = product.stock === 0;
+  const isLowStock = product.stock > 0 && product.stock <= 5;
+
   return (
     <div className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 flex flex-col">
       <Link href={`/products/${product.id}`} className="block relative aspect-square overflow-hidden" style={{ background: "#0d1117" }}>
         {imgUrl ? (
-          <Image src={imgUrl} alt={product.name || "Product image"} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+          <Image src={imgUrl} alt={product.name || "Product image"} fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            unoptimized />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-7xl opacity-10">✈</div>
         )}
-        {/* Overlay on hover */}
+        {/* Hover overlay */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
           style={{ background: "rgba(0,0,0,0.4)" }}>
           <span className="text-xs tracking-widest font-bold px-4 py-2 rounded-lg"
             style={{ background: "var(--gold)", color: "#0a0e1a" }}>QUICK VIEW</span>
         </div>
-        {/* Badges */}
-        {product.stock === 0 && (
+        {/* Stock badges */}
+        {isOutOfStock && (
           <div className="absolute top-3 left-3 px-2 py-1 rounded text-xs font-bold tracking-wide"
             style={{ background: "#ef4444dd", color: "white" }}>SOLD OUT</div>
         )}
-        {product.stock > 0 && product.stock <= 5 && (
+        {isLowStock && (
           <div className="absolute top-3 left-3 px-2 py-1 rounded text-xs font-bold tracking-wide"
             style={{ background: "var(--gold)", color: "#0a0e1a" }}>
             ONLY {product.stock} LEFT
@@ -83,20 +104,28 @@ export default function ProductCard({ product }: Props) {
             )}
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock === 0 || adding}
-            className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all disabled:opacity-40 min-h-[44px]"
-            style={
-              added
-                ? { background: "#22c55e", color: "white" }
-                : product.stock === 0
-                ? { background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }
-                : { background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }
-            }
-          >
-            {adding ? "..." : added ? "✓ ADDED" : product.stock === 0 ? "SOLD OUT" : "+ CART"}
-          </button>
+          {/* Cart button — shows LOGIN if not authenticated */}
+          {!user ? (
+            <Link href="/auth/login"
+              className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all min-h-[44px] flex items-center"
+              style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
+              LOGIN
+            </Link>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock || adding}
+              className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all disabled:opacity-40 min-h-[44px]"
+              style={
+                added
+                  ? { background: "#22c55e", color: "white" }
+                  : isOutOfStock
+                    ? { background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }
+                    : { background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }
+              }>
+              {adding ? "..." : added ? "✓ ADDED" : isOutOfStock ? "SOLD OUT" : "+ CART"}
+            </button>
+          )}
         </div>
       </div>
     </div>

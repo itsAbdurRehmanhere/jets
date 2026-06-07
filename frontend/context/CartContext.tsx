@@ -42,6 +42,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   async function addToCart(productId: number, quantity = 1) {
+    if (!user) {
+      throw new Error("LOGIN_REQUIRED");
+    }
     await api.cart.add({ product_id: productId, quantity });
     await refreshCart();
   }
