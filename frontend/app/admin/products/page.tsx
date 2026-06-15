@@ -4,12 +4,10 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { api, Product, Category } from "@/lib/api";
+import { api, API_URL, Product, Category } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { SuccessAlert, ErrorAlert } from "@/components/ui/Alert";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 type ProductForm = {
   title: string;

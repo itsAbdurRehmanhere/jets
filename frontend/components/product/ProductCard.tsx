@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Product } from "@/lib/api";
+import { API_URL, Product } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
@@ -44,7 +44,6 @@ export default function ProductCard({ product }: Props) {
     }
   };
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const imgUrl = product.images?.[0]?.url
     ? `${API_URL}${product.images[0].url}`
     : null;

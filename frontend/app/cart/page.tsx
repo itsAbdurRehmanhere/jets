@@ -9,12 +9,12 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { AuthGuard } from "@/components/ui/AuthGuard";
+import { API_URL } from "@/lib/api";
 
 export default function CartPage() {
   const { cartItems, totalItems, totalPrice, updateItem, removeItem, clearCart, loading } = useCart();
   const { user } = useAuth();
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   if (!user) {
     return <AuthGuard icon="🛒" message="Please log in to view your cart." />;
@@ -55,7 +55,7 @@ export default function CartPage() {
                 <Link href={`/products/${item.product_id}`}
                   className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ background: "#f1f5f9" }}>
                   {item.product?.images?.[0] ? (
-                    <Image src={`${apiUrl}${item.product.images[0].url}`} alt={item.product.name} fill className="object-cover" />
+                    <Image src={`${API_URL}${item.product.images[0].url}`} alt={item.product.name} fill className="object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">✈</div>
                   )}

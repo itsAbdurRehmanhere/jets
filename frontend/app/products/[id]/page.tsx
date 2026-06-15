@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { api, Product, ProductImage } from "@/lib/api";
+import { api, API_URL, Product, ProductImage } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -67,7 +67,6 @@ export default function ProductDetailPage() {
 
   const inStock = product.stock > 0;
   const lowStock = product.stock > 0 && product.stock <= 5;
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
@@ -86,7 +85,7 @@ export default function ProductDetailPage() {
           <div className="space-y-3">
             <div className="relative rounded-2xl overflow-hidden aspect-square w-full" style={{ background: "#f1f5f9" }}>
               {selectedImage ? (
-                <Image src={`${apiUrl}${selectedImage.url}`} alt={product.name || "Product image"}
+                <Image src={`${API_URL}${selectedImage.url}`} alt={product.name || "Product image"}
                   fill className="object-cover" priority />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-8xl opacity-10">✈</div>
@@ -101,7 +100,7 @@ export default function ProductDetailPage() {
                       border: selectedImage?.id === img.id ? "2px solid var(--gold)" : "2px solid var(--border)",
                       background: "#f1f5f9"
                     }}>
-                    <Image src={`${apiUrl}${img.url}`} alt="" fill className="object-cover" />
+                    <Image src={`${API_URL}${img.url}`} alt="" fill className="object-cover" />
                   </button>
                 ))}
               </div>

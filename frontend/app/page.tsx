@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { api, Product, Category } from "@/lib/api";
+import { api, API_URL, Product, Category } from "@/lib/api";
 import { StockBadge } from "@/components/ui/StockBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -20,8 +20,6 @@ const HERO_IMAGES = [
 ];
 const SLIDE_INTERVAL_MS = 5000;
 // ─────────────────────────────────────────────────────────────────────────────
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function HomePage() {
   const [featured, setFeatured] = useState<Product[]>([]);
