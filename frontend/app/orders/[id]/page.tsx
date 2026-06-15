@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 
 const statusSteps = ["pending", "confirmed", "processing", "shipped", "delivered"];
 
-export default function OrderDetailPage() {
+function OrderDetailContent() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const router = useRouter();
@@ -190,5 +190,19 @@ export default function OrderDetailPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function OrderDetailPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+        <div className="max-w-3xl mx-auto px-4 py-12">
+          <LoadingSkeleton count={3} height={200} />
+        </div>
+      </div>
+    }>
+      <OrderDetailContent />
+    </Suspense>
   );
 }

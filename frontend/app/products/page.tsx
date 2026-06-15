@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { api, Product, Category } from "@/lib/api";
 import ProductCard from "@/components/product/ProductCard";
@@ -9,7 +9,7 @@ import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pagination } from "@/components/ui/Pagination";
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const [productList, setProductList] = useState<Product[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -162,5 +162,19 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <LoadingSkeleton count={6} height={320} layout="grid-3" />
+        </div>
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   );
 }
