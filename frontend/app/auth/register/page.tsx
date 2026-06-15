@@ -40,7 +40,7 @@ export default function RegisterPage() {
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-4"
             style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
-            âœˆ
+            ✈
           </div>
           <h1 className="text-3xl font-black tracking-wider text-center" style={{ color: "var(--text-primary)" }}>CREATE ACCOUNT</h1>
           <p className="text-sm mt-2 tracking-wide text-center" style={{ color: "var(--text-muted)" }}>Join PAF Store today</p>

@@ -42,7 +42,7 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-4"
             style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
-            âœˆ
+            ✈
           </div>
           <h1 className="text-3xl font-black tracking-wider text-center" style={{ color: "var(--text-primary)" }}>
             WELCOME BACK
@@ -73,7 +73,7 @@ export default function LoginPage() {
               <input
                 type="password" required value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="••••••••"
                 className="input-dark"
               />
             </div>
