@@ -94,7 +94,7 @@ export const api = {
           .filter(([, v]) => v !== undefined && v !== "")
           .map(([k, v]) => [k, String(v)])
       ).toString();
-      return request<ProductListResponse>(`/products${qs ? `?${qs}` : ""}`).then((r) => {
+      return request<ProductListResponse>(`/products/${qs ? `?${qs}` : ""}`).then((r) => {
         const raw = r as unknown as Record<string, unknown>;
         const items = ((raw.products ?? raw.data ?? []) as Record<string, unknown>[]).map(normalizeProduct);
         return { products: items, total: (raw.total as number) ?? items.length, skip: (raw.skip as number) ?? 0, limit: (raw.limit as number) ?? items.length };
@@ -110,11 +110,11 @@ export const api = {
 
   categories: {
     list: () =>
-      request<{ data: Category[] } | Category[]>("/categories").then((r) =>
+      request<{ data: Category[] } | Category[]>("/categories/").then((r) =>
         Array.isArray(r) ? r : (r as { data: Category[] }).data ?? []
       ),
     create: (data: { name: string; description?: string }) =>
-      request<{ data: Category }>("/categories", { method: "POST", body: JSON.stringify(data) })
+      request<{ data: Category }>("/categories/", { method: "POST", body: JSON.stringify(data) })
         .then((r) => (r as { data: Category }).data ?? r),
     update: (id: number, data: { name: string; description?: string }) =>
       request<{ data: Category }>(`/categories/${id}`, { method: "PUT", body: JSON.stringify(data) })
