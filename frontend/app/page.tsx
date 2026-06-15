@@ -21,6 +21,8 @@ const HERO_IMAGES = [
 const SLIDE_INTERVAL_MS = 5000;
 // ─────────────────────────────────────────────────────────────────────────────
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function HomePage() {
   const [featured, setFeatured] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -196,7 +198,7 @@ export default function HomePage() {
                 className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-100 flex flex-col">
                 <div className="relative aspect-square overflow-hidden" style={{ background: "#f1f5f9" }}>
                   {product.images?.[0] ? (
-                    <Image src={`http://localhost:8000${product.images[0].url}`}
+                    <Image src={`${API_URL}${product.images[0].url}`}
                       alt={product.name || "Product"} fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       unoptimized />
