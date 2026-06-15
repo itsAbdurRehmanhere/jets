@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -118,10 +118,10 @@ export default function AdminProductsPage() {
       };
       if (modal === "create") {
         await api.admin.products.create(data);
-        setSaveMsg("âœ“ Product created!");
+        setSaveMsg("✓ Product created!");
       } else if (activeProduct) {
         await api.admin.products.update(activeProduct.id, data);
-        setSaveMsg("âœ“ Product updated!");
+        setSaveMsg("✓ Product updated!");
       }
       fetchProducts();
       setTimeout(() => { setModal(null); setSaveMsg(""); }, 800);
@@ -151,7 +151,7 @@ export default function AdminProductsPage() {
     setUploadMsg("");
     try {
       await api.admin.products.uploadImages(activeProduct.id, uploadFiles);
-      setUploadMsg(`âœ“ Uploaded ${uploadFiles.length} image(s)!`);
+      setUploadMsg(`✓ Uploaded ${uploadFiles.length} image(s)!`);
       setUploadFiles([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
       fetchProducts();
@@ -198,7 +198,7 @@ export default function AdminProductsPage() {
             <div>
               <div className="mb-1">
                 <Link href="/admin" className="text-xs tracking-widest hover:text-sky-500 transition-colors"
-                  style={{ color: "var(--text-muted)" }}>â† DASHBOARD</Link>
+                  style={{ color: "var(--text-muted)" }}>← DASHBOARD</Link>
               </div>
               <p className="text-xs tracking-widest uppercase" style={{ color: "var(--gold)" }}>Admin Panel</p>
               <h1 className="text-2xl sm:text-3xl font-black" style={{ color: "var(--text-primary)" }}>
@@ -247,7 +247,7 @@ export default function AdminProductsPage() {
           <LoadingSkeleton count={4} height={80} />
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4 opacity-20">ðŸ“¦</div>
+            <div className="text-5xl mb-4 opacity-20">📦</div>
             <p className="text-lg font-bold mb-4" style={{ color: "var(--text-muted)" }}>No products found</p>
             <button onClick={openCreate} className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-widest uppercase">
               Add Your First Product
@@ -280,7 +280,7 @@ export default function AdminProductsPage() {
                             <Image src={imgUrl} alt={product.name} width={48} height={48}
                               className="w-full h-full object-cover" unoptimized />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-lg opacity-20">âœˆ</div>
+                            <div className="w-full h-full flex items-center justify-center text-lg opacity-20">✈</div>
                           )}
                         </div>
                       </td>
@@ -292,7 +292,7 @@ export default function AdminProductsPage() {
                         </p>
                       </td>
                       <td className="px-4 py-3 text-xs" style={{ color: "var(--text-muted)" }}>
-                        {cat?.name || "â€”"}
+                        {cat?.name || "—"}
                       </td>
                       <td className="px-4 py-3">
                         <span className="text-xs font-bold text-gold-gradient">
@@ -340,18 +340,18 @@ export default function AdminProductsPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between">
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Showing {page * limit + 1}â€“{Math.min((page + 1) * limit, total)} of {total}
+              Showing {page * limit + 1}—{Math.min((page + 1) * limit, total)} of {total}
             </p>
             <div className="flex gap-2">
               <button disabled={page === 0} onClick={() => setPage(p => p - 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                â† Prev
+                ← Prev
               </button>
               <button disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                Next â†’
+                Next →
               </button>
             </div>
           </div>
@@ -374,7 +374,7 @@ export default function AdminProductsPage() {
                   {modal === "create" ? "Add Product" : form.title || "Edit"}
                 </h2>
               </div>
-              <button onClick={() => setModal(null)} className="text-xl" style={{ color: "var(--text-muted)" }}>âœ•</button>
+              <button onClick={() => setModal(null)} className="text-xl" style={{ color: "var(--text-muted)" }}>✕</button>
             </div>
 
             <div className="space-y-4">
@@ -422,7 +422,7 @@ export default function AdminProductsPage() {
               </div>
             </div>
 
-            {saveMsg && (saveMsg.startsWith("âœ“")
+            {saveMsg && (saveMsg.startsWith("✓")
               ? <SuccessAlert message={saveMsg} />
               : <ErrorAlert message={saveMsg} />
             )}
@@ -454,7 +454,7 @@ export default function AdminProductsPage() {
                 <p className="text-xs tracking-widest uppercase" style={{ color: "var(--gold)" }}>Product Images</p>
                 <h2 className="text-xl font-black" style={{ color: "var(--text-primary)" }}>{activeProduct.name}</h2>
               </div>
-              <button onClick={() => setModal(null)} className="text-xl" style={{ color: "var(--text-muted)" }}>âœ•</button>
+              <button onClick={() => setModal(null)} className="text-xl" style={{ color: "var(--text-muted)" }}>✕</button>
             </div>
 
             {/* Current Images */}
@@ -475,7 +475,7 @@ export default function AdminProductsPage() {
                       <button onClick={() => handleDeleteImage(img.id)}
                         className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ background: "#ef4444", color: "white" }}>
-                        âœ•
+                        ✕
                       </button>
                     </div>
                   ))}
@@ -483,7 +483,7 @@ export default function AdminProductsPage() {
               </div>
             ) : (
               <div className="text-center py-8 rounded-xl" style={{ background: "var(--bg-card)" }}>
-                <div className="text-3xl mb-2 opacity-20">ðŸ–¼</div>
+                <div className="text-3xl mb-2 opacity-20">🖼</div>
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>No images yet</p>
               </div>
             )}
@@ -509,16 +509,16 @@ export default function AdminProductsPage() {
                   </div>
                 ) : (
                   <div>
-                    <div className="text-2xl mb-1 opacity-40">ðŸ“</div>
+                    <div className="text-2xl mb-1 opacity-40">🔍</div>
                     <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                      Click to select images (JPG, PNG, WebP Â· max 5MB each)
+                      Click to select images (JPG, PNG, WebP · max 5MB each)
                     </p>
                   </div>
                 )}
               </div>
             </div>
 
-            {uploadMsg && (uploadMsg.startsWith("âœ“")
+            {uploadMsg && (uploadMsg.startsWith("✓")
               ? <SuccessAlert message={uploadMsg} />
               : <ErrorAlert message={uploadMsg} />
             )}
@@ -542,4 +542,3 @@ export default function AdminProductsPage() {
     </div>
   );
 }
-

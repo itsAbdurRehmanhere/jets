@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -78,7 +78,7 @@ export default function AdminOrdersPage() {
     setSaveMsg("");
     try {
       await api.orders.updateStatus(editOrder.id, editStatus, editPayment, editNotes);
-      setSaveMsg("âœ“ Updated successfully");
+      setSaveMsg("✓ Updated successfully");
       fetchOrders();
       setTimeout(() => { setEditOrder(null); setSaveMsg(""); }, 800);
     } catch (err) {
@@ -107,7 +107,7 @@ export default function AdminOrdersPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Link href="/admin" className="text-xs tracking-widest hover:text-sky-500 transition-colors"
-                  style={{ color: "var(--text-muted)" }}>â† DASHBOARD</Link>
+                  style={{ color: "var(--text-muted)" }}>← DASHBOARD</Link>
               </div>
               <p className="text-xs tracking-widest uppercase" style={{ color: "var(--gold)" }}>Admin Panel</p>
               <h1 className="text-2xl sm:text-3xl font-black" style={{ color: "var(--text-primary)" }}>
@@ -161,7 +161,7 @@ export default function AdminOrdersPage() {
           <LoadingSkeleton count={5} height={64} />
         ) : orders.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4 opacity-20">ðŸ“¦</div>
+            <div className="text-5xl mb-4 opacity-20">📦</div>
             <p className="text-lg font-bold" style={{ color: "var(--text-muted)" }}>No orders found</p>
           </div>
         ) : (
@@ -193,14 +193,14 @@ export default function AdminOrdersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
-                          {order.customer_name || "â€”"}
+                          {order.customer_name || "—"}
                         </div>
                         <div className="text-xs" style={{ color: "var(--text-muted)" }}>
                           {order.customer_email || ""}
                         </div>
                       </td>
                       <td className="px-4 py-3 text-xs" style={{ color: "var(--text-muted)" }}>
-                        {order.items?.length ?? "â€”"}
+                        {order.items?.length ?? "—"}
                       </td>
                       <td className="px-4 py-3">
                         <span className="font-bold text-xs text-gold-gradient">
@@ -245,18 +245,18 @@ export default function AdminOrdersPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between">
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Showing {page * limit + 1}â€“{Math.min((page + 1) * limit, total)} of {total}
+              Showing {page * limit + 1}—{Math.min((page + 1) * limit, total)} of {total}
             </p>
             <div className="flex gap-2">
               <button disabled={page === 0} onClick={() => setPage(p => p - 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                â† Prev
+                ← Prev
               </button>
               <button disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                Next â†’
+                Next →
               </button>
             </div>
           </div>
@@ -277,11 +277,11 @@ export default function AdminOrdersPage() {
                   #{editOrder.order_number || editOrder.id}
                 </h2>
                 <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-                  {editOrder.customer_name} Â· {editOrder.customer_email}
+                  {editOrder.customer_name} · {editOrder.customer_email}
                 </p>
               </div>
               <button onClick={() => setEditOrder(null)}
-                className="text-xl leading-none" style={{ color: "var(--text-muted)" }}>âœ•</button>
+                className="text-xl leading-none" style={{ color: "var(--text-muted)" }}>✕</button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -324,7 +324,7 @@ export default function AdminOrdersPage() {
                 <p className="text-xs font-bold tracking-widest uppercase" style={{ color: "var(--gold)" }}>Items</p>
                 {editOrder.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-xs" style={{ color: "var(--text-muted)" }}>
-                    <span>{item.product_name} Ã— {item.quantity}</span>
+                    <span>{item.product_name} × {item.quantity}</span>
                     <span>PKR {(Number(item.price) * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
@@ -335,7 +335,7 @@ export default function AdminOrdersPage() {
               </div>
             )}
 
-            {saveMsg && (saveMsg.startsWith("âœ“")
+            {saveMsg && (saveMsg.startsWith("✓")
               ? <SuccessAlert message={saveMsg} />
               : <ErrorAlert message={saveMsg} />
             )}
@@ -357,4 +357,3 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
-

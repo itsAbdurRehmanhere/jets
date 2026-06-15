@@ -23,7 +23,7 @@ export default function ProductCard({ product }: Props) {
     e.preventDefault();
     if (product.stock === 0) return;
 
-    // Not logged in â†’ redirect to login
+    // Not logged in → redirect to login
     if (!user) {
       router.push("/auth/login");
       return;
@@ -59,7 +59,7 @@ export default function ProductCard({ product }: Props) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             unoptimized />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-7xl opacity-10">âœˆ</div>
+          <div className="w-full h-full flex items-center justify-center text-7xl opacity-10">✈</div>
         )}
         {/* Hover overlay */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
@@ -104,7 +104,7 @@ export default function ProductCard({ product }: Props) {
             )}
           </div>
 
-          {/* Cart button â€” shows LOGIN if not authenticated */}
+          {/* Cart button — shows LOGIN if not authenticated */}
           {!user ? (
             <Link href="/auth/login"
               className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all min-h-[44px] flex items-center"
@@ -123,7 +123,7 @@ export default function ProductCard({ product }: Props) {
                     ? { background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }
                     : { background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }
               }>
-              {adding ? "..." : added ? "âœ“ ADDED" : isOutOfStock ? "SOLD OUT" : "+ CART"}
+              {adding ? “...” : added ? “✓ ADDED” : isOutOfStock ? “SOLD OUT” : “+ CART”}
             </button>
           )}
         </div>

@@ -17,7 +17,7 @@ export default function CartPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   if (!user) {
-    return <AuthGuard icon="ðŸ›’" message="Please log in to view your cart." />;
+    return <AuthGuard icon="🛒" message="Please log in to view your cart." />;
   }
 
   if (loading) {
@@ -33,7 +33,7 @@ export default function CartPage() {
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
-        <EmptyState icon="ðŸ›’" title="Your Cart is Empty" description="Discover our exclusive PAF collectibles" ctaText="Browse Collection" />
+        <EmptyState icon="🛒" title="Your Cart is Empty" description="Discover our exclusive PAF collectibles" ctaText="Browse Collection" />
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default function CartPage() {
                   {item.product?.images?.[0] ? (
                     <Image src={`${apiUrl}${item.product.images[0].url}`} alt={item.product.name} fill className="object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">âœˆ</div>
+                    <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">✈</div>
                   )}
                 </Link>
 
@@ -80,7 +80,7 @@ export default function CartPage() {
                   <div className="flex items-center rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                     <button onClick={() => updateItem(item.id, item.quantity - 1)}
                       className="px-4 py-3 text-sm transition-colors hover:bg-black/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      style={{ color: "var(--text-muted)" }}>âˆ’</button>
+                      style={{ color: "var(--text-muted)" }}>−</button>
                     <span className="px-3 py-3 text-sm font-bold min-w-[2.5rem] text-center"
                       style={{ color: "var(--text-primary)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)" }}>
                       {item.quantity}
@@ -116,7 +116,7 @@ export default function CartPage() {
                 {cartItems.map(item => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="line-clamp-1 mr-2" style={{ color: "var(--text-muted)" }}>
-                      {item.product?.name || `Item`} Ã— {item.quantity}
+                      {item.product?.name || `Item`} × {item.quantity}
                     </span>
                     <span style={{ color: "var(--text-primary)" }}>
                       PKR {(Number(item.price) * item.quantity).toLocaleString()}
@@ -144,7 +144,7 @@ export default function CartPage() {
 
               <Link href="/products" className="block text-center text-xs tracking-widest mt-4 transition-colors hover:text-sky-500"
                 style={{ color: "var(--text-muted)" }}>
-                â† Continue Shopping
+                ← Continue Shopping
               </Link>
             </div>
           </div>
@@ -153,4 +153,5 @@ export default function CartPage() {
     </div>
   );
 }
+
 

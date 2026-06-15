@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -101,7 +101,7 @@ export default function AdminCategoriesPage() {
           <div className="flex items-center gap-3 mb-1">
             <Link href="/admin" className="text-xs tracking-wider hover:text-sky-500 transition-colors"
               style={{ color: "var(--text-muted)" }}>
-              â† Admin
+              ← Admin
             </Link>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-2">
@@ -122,7 +122,7 @@ export default function AdminCategoriesPage() {
           <LoadingSkeleton count={4} height={72} />
         ) : categories.length === 0 ? (
           <div className="card rounded-2xl p-16 text-center">
-            <div className="text-5xl mb-4 opacity-20">ðŸ—‚</div>
+            <div className="text-5xl mb-4 opacity-20">🗂</div>
             <p className="text-lg font-bold mb-2" style={{ color: "var(--text-primary)" }}>No categories yet</p>
             <p className="text-sm mb-6" style={{ color: "var(--text-muted)" }}>Create your first category to organise products.</p>
             <button onClick={openCreate} className="btn-gold px-6 py-3 rounded-xl text-sm font-bold tracking-wider">
@@ -201,7 +201,7 @@ export default function AdminCategoriesPage() {
               </h2>
               <button onClick={closeModal}
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-lg hover:bg-black/5 transition-colors"
-                style={{ color: "var(--text-muted)" }}>Ã—</button>
+                style={{ color: "var(--text-muted)" }}>×</button>
             </div>
 
             {/* Form */}
@@ -212,7 +212,7 @@ export default function AdminCategoriesPage() {
                 </label>
                 <input
                   className="input-dark"
-                  placeholder="e.g. Fighter Jets, T-Shirts, Capsâ€¦"
+                  placeholder="e.g. Fighter Jets, T-Shirts, Caps…"
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   onKeyDown={e => { if (e.key === "Enter") handleSave(); }}
@@ -226,7 +226,7 @@ export default function AdminCategoriesPage() {
                 <textarea
                   className="input-dark resize-none"
                   rows={3}
-                  placeholder="Brief description of this categoryâ€¦"
+                  placeholder="Brief description of this category…"
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                 />
@@ -244,7 +244,7 @@ export default function AdminCategoriesPage() {
               </button>
               <button onClick={handleSave} disabled={saving}
                 className="flex-1 py-3 rounded-xl text-sm font-bold tracking-wider disabled:opacity-50 btn-gold">
-                {saving ? "Savingâ€¦" : modal.mode === "create" ? "Create" : "Save Changes"}
+                {saving ? "Saving…" : modal.mode === "create" ? "Create" : "Save Changes"}
               </button>
             </div>
           </div>
@@ -253,4 +253,3 @@ export default function AdminCategoriesPage() {
     </div>
   );
 }
-
