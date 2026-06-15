@@ -44,8 +44,9 @@ export default function ProductCard({ product }: Props) {
     }
   };
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const imgUrl = product.images?.[0]?.url
-    ? `http://localhost:8000${product.images[0].url}`
+    ? `${API_URL}${product.images[0].url}`
     : null;
 
   const isOutOfStock = product.stock === 0;
