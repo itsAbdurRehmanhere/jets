@@ -2,6 +2,7 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from app.models.user import User
+from app.models.password_reset import PasswordResetToken  # ensures table is created
 from app.core.security import hash_password
 from app.core.config import DAtABASE_URL
 from app.core.database import Base

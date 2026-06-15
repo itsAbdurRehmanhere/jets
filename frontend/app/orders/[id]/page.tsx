@@ -6,15 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { api, Order } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-
-const statusColors: Record<string, { bg: string; color: string }> = {
-  pending:    { bg: "#f59e0b20", color: "#f59e0b" },
-  confirmed:  { bg: "#3b82f620", color: "#60a5fa" },
-  processing: { bg: "#8b5cf620", color: "#a78bfa" },
-  shipped:    { bg: "#0ea5e920", color: "#38bdf8" },
-  delivered:  { bg: "#22c55e20", color: "#22c55e" },
-  cancelled:  { bg: "#ef444420", color: "#ef4444" },
-};
+import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 
 const statusSteps = ["pending", "confirmed", "processing", "shipped", "delivered"];
 
@@ -42,10 +35,8 @@ export default function OrderDetailPage() {
   if (loading) {
     return (
       <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
-        <div className="max-w-3xl mx-auto px-4 py-12 space-y-4">
-          {[200, 120, 300].map((h, i) => (
-            <div key={i} className="rounded-2xl animate-pulse" style={{ background: "var(--bg-card)", height: h }} />
-          ))}
+        <div className="max-w-3xl mx-auto px-4 py-12">
+          <LoadingSkeleton count={3} height={200} />
         </div>
       </div>
     );
@@ -53,14 +44,13 @@ export default function OrderDetailPage() {
 
   if (!order) return null;
 
-  const sc = statusColors[order.status] || { bg: "#ffffff10", color: "var(--text-muted)" };
   const currentStep = statusSteps.indexOf(order.status);
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
         <div className="max-w-3xl mx-auto px-6 lg:px-8 py-10">
-          <Link href="/orders" className="text-xs tracking-widest hover:text-yellow-400 transition-colors mb-4 block"
+          <Link href="/orders" className="text-xs tracking-widest hover:text-sky-500 transition-colors mb-4 block"
             style={{ color: "var(--text-muted)" }}>← BACK TO ORDERS</Link>
           <div className="flex items-center gap-4">
             <div>
@@ -69,18 +59,16 @@ export default function OrderDetailPage() {
                 #{order.order_number || order.id}
               </h1>
             </div>
-            <span className="px-3 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase ml-auto"
-              style={{ background: sc.bg, color: sc.color }}>
-              {order.status}
-            </span>
+            <div className="ml-auto">
+              <StatusBadge status={order.status} />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-6 lg:px-8 py-8 space-y-6">
-        {/* Just placed banner */}
         {justPlaced && (
-          <div className="rounded-2xl p-6 text-center" style={{ background: "#0d1b2a", border: "1px solid #1e3a5f" }}>
+          <div className="rounded-2xl p-6 text-center" style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
             <div className="text-4xl mb-3">🎉</div>
             <h2 className="text-xl font-black mb-2" style={{ color: "var(--gold)" }}>ORDER PLACED SUCCESSFULLY!</h2>
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -122,7 +110,7 @@ export default function OrderDetailPage() {
           <div className="space-y-4">
             {order.items?.map(item => (
               <div key={item.id} className="flex gap-4 items-center">
-                <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0" style={{ background: "#0d1117" }}>
+                <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0" style={{ background: "#f1f5f9" }}>
                   {item.product?.images?.[0] ? (
                     <Image src={`${apiUrl}${item.product.images[0].url}`} alt={item.product_name} fill className="object-cover" />
                   ) : (
@@ -154,15 +142,25 @@ export default function OrderDetailPage() {
             <p>{order.shipping_city}, {order.shipping_country}</p>
             <p className="text-xs mt-2">Ordered: {new Date(order.created_at).toLocaleString("en-PK")}</p>
           </div>
+          {order.tracking_number && (
+            <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+              <p className="text-xs font-bold tracking-widest mb-1" style={{ color: "var(--gold)" }}>TRACKING NUMBER</p>
+              <p className="font-mono text-sm font-bold" style={{ color: "var(--text-primary)" }}>{order.tracking_number}</p>
+              {(order as typeof order & { tracking_company?: string }).tracking_company && (
+                <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                  via {(order as typeof order & { tracking_company?: string }).tracking_company}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* WhatsApp */}
         {order.status === "pending" && (
-          <div className="rounded-2xl p-6 text-center" style={{ background: "#0d1b2a", border: "1px solid #1e3a5f" }}>
+          <div className="rounded-2xl p-6 text-center" style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
             <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
               Questions about your order? Contact us on WhatsApp.
             </p>
-            <a href={`https://wa.me/923001234567?text=Hi, I have a question about order #${order.order_number || order.id}`}
+            <a href={`https://wa.me/923207331147?text=Hi, I have a question about order #${order.order_number || order.id}`}
               target="_blank" rel="noopener noreferrer"
               className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-wider inline-block">
               💬 WhatsApp Us

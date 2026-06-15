@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#050810", borderTop: "1px solid var(--border)" }}>
+    <footer style={{ background: "var(--bg-secondary)", borderTop: "1px solid var(--border)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14 md:py-16">
 
         {/* Top grid */}
@@ -24,8 +24,8 @@ export default function Footer() {
               Premium Pakistan Air Force collectibles — handcrafted fighter jet models,
               sculptures, trophies, and memorabilia for aviation enthusiasts.
             </p>
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg text-xs font-bold tracking-wider transition-colors hover:bg-white/5"
+            <a href="https://wa.me/923207331147" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg text-xs font-bold tracking-wider transition-colors hover:bg-black/5"
               style={{ border: "1px solid var(--border)", color: "var(--gold)" }}>
               💬 WhatsApp Us
             </a>
@@ -42,7 +42,7 @@ export default function Footer() {
                 { label: "Trophies", href: "/products?category_id=3" },
               ].map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm transition-colors hover:text-yellow-400"
+                  <Link href={l.href} className="text-sm transition-colors hover:text-sky-500"
                     style={{ color: "var(--text-muted)" }}>{l.label}</Link>
                 </li>
               ))}
@@ -60,7 +60,7 @@ export default function Footer() {
                 { label: "Profile", href: "/profile" },
               ].map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm transition-colors hover:text-yellow-400"
+                  <Link href={l.href} className="text-sm transition-colors hover:text-sky-500"
                     style={{ color: "var(--text-muted)" }}>{l.label}</Link>
                 </li>
               ))}
@@ -72,10 +72,10 @@ export default function Footer() {
         <div style={{ height: "1px", background: "var(--border)", marginBottom: "1.5rem" }} />
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-center sm:text-left"
           style={{ color: "var(--text-muted)" }}>
           <p>© {new Date().getFullYear()} PAF Store. All rights reserved.</p>
-          <p className="tracking-wider text-center">FREE SHIPPING ON ORDERS OVER PKR 10,000</p>
+          <p className="tracking-wider">FREE SHIPPING ON ORDERS OVER PKR 10,000</p>
         </div>
 
       </div>

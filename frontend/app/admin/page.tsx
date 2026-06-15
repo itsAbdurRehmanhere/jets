@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, AdminStats } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 
 const statusColors: Record<string, string> = {
   pending: "#f59e0b",
@@ -13,6 +14,14 @@ const statusColors: Record<string, string> = {
   delivered: "#22c55e",
   cancelled: "#ef4444",
 };
+
+const adminNav = [
+  { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/products", label: "Products" },
+  { href: "/admin/categories", label: "Categories" },
+  { href: "/admin/product-types", label: "Product Types" },
+  { href: "/admin/users", label: "Users" },
+];
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -31,32 +40,26 @@ export default function AdminPage() {
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+          <div className="mb-4">
             <p className="text-xs tracking-widest mb-2" style={{ color: "var(--gold)" }}>PAF STORE</p>
             <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>ADMIN DASHBOARD</h1>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <Link href="/admin/orders"
-              className="px-5 py-2.5 rounded-xl text-sm font-bold tracking-wider transition-colors hover:bg-white/5 text-center"
-              style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}>
-              📦 Manage Orders
-            </Link>
-            <Link href="/admin/products"
-              className="btn-gold px-5 py-2.5 rounded-xl text-sm font-bold tracking-wider text-center">
-              ✈ Manage Products
-            </Link>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            {adminNav.map(link => (
+              <Link key={link.href} href={link.href}
+                className="px-5 py-2.5 rounded-xl text-sm font-bold tracking-wider transition-colors hover:bg-black/5 text-center"
+                style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}>
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="rounded-2xl animate-pulse" style={{ background: "var(--bg-card)", height: 120 }} />
-            ))}
-          </div>
+          <LoadingSkeleton count={4} height={120} layout="grid-4" />
         ) : stats ? (
           <div className="space-y-8">
             {/* KPI Cards */}
@@ -80,7 +83,7 @@ export default function AdminPage() {
               <div className="card rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h3 className="text-xs font-bold tracking-widest" style={{ color: "var(--gold)" }}>ORDERS BY STATUS</h3>
-                  <Link href="/admin/orders" className="text-xs tracking-wider hover:text-yellow-400 transition-colors" style={{ color: "var(--text-muted)" }}>
+                  <Link href="/admin/orders" className="text-xs tracking-wider hover:text-sky-500 transition-colors" style={{ color: "var(--text-muted)" }}>
                     View All →
                   </Link>
                 </div>
@@ -133,7 +136,7 @@ export default function AdminPage() {
               <div className="card rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h3 className="text-xs font-bold tracking-widest" style={{ color: "var(--gold)" }}>RECENT ORDERS</h3>
-                  <Link href="/admin/orders" className="text-xs tracking-wider hover:text-yellow-400 transition-colors" style={{ color: "var(--text-muted)" }}>View All →</Link>
+                  <Link href="/admin/orders" className="text-xs tracking-wider hover:text-sky-500 transition-colors" style={{ color: "var(--text-muted)" }}>View All →</Link>
                 </div>
                 <div className="space-y-3">
                   {stats.recent_orders.length === 0 ? (
@@ -185,8 +188,8 @@ export default function AdminPage() {
             {stats.low_stock_alerts.length > 0 && (
               <div className="card rounded-2xl p-6" style={{ borderColor: "#f59e0b40" }}>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xs font-bold tracking-widest" style={{ color: "#f59e0b" }}>⚠ LOW STOCK ALERTS</h3>
-                  <Link href="/admin/products" className="text-xs tracking-wider hover:text-yellow-400 transition-colors" style={{ color: "var(--text-muted)" }}>
+                  <h3 className="text-xs font-bold tracking-widest" style={{ color: "#f59e0b" }}>LOW STOCK ALERTS</h3>
+                  <Link href="/admin/products" className="text-xs tracking-wider hover:text-sky-500 transition-colors" style={{ color: "var(--text-muted)" }}>
                     Manage →
                   </Link>
                 </div>
@@ -205,10 +208,10 @@ export default function AdminPage() {
             {/* Quick actions */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Pending Orders", value: stats.orders.pending, href: "/admin/orders?status=pending", color: "#f59e0b", bg: "#f59e0b20" },
-                { label: "Processing", value: stats.orders.processing, href: "/admin/orders?status=processing", color: "#a78bfa", bg: "#8b5cf620" },
-                { label: "Shipped", value: stats.orders.shipped, href: "/admin/orders?status=shipped", color: "#38bdf8", bg: "#0ea5e920" },
-                { label: "Delivered", value: stats.orders.delivered, href: "/admin/orders?status=delivered", color: "#22c55e", bg: "#22c55e20" },
+                { label: "Pending Orders", value: stats.orders.pending, href: "/admin/orders?status=pending", color: "#f59e0b" },
+                { label: "Processing", value: stats.orders.processing, href: "/admin/orders?status=processing", color: "#a78bfa" },
+                { label: "Shipped", value: stats.orders.shipped, href: "/admin/orders?status=shipped", color: "#38bdf8" },
+                { label: "Delivered", value: stats.orders.delivered, href: "/admin/orders?status=delivered", color: "#22c55e" },
               ].map(item => (
                 <Link key={item.label} href={item.href}
                   className="card rounded-2xl p-5 text-center hover:-translate-y-0.5 transition-all">

@@ -125,6 +125,59 @@ def send_order_confirmation_email(
         print(f"Error sending email: {str(e)}")
         return False
 
+def send_password_reset_email(recipient_email: str, username: str, reset_url: str) -> bool:
+    """Send password reset email"""
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = "Reset Your PAF Store Password"
+        msg["From"] = SMTP_FROM_EMAIL
+        msg["To"] = recipient_email
+
+        html_body = f"""
+        <html>
+            <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+                    <div style="text-align:center; margin-bottom:24px;">
+                        <span style="font-size:32px;">&#9992;</span>
+                        <h2 style="color:#c9a84c; margin:8px 0 0;">PAF STORE</h2>
+                    </div>
+                    <h3 style="color:#1e293b;">Reset Your Password</h3>
+                    <p>Hi <strong>{username}</strong>,</p>
+                    <p>We received a request to reset your password. Click the button below to choose a new one. This link expires in <strong>1 hour</strong>.</p>
+                    <div style="text-align:center; margin:32px 0;">
+                        <a href="{reset_url}"
+                           style="background:linear-gradient(135deg,#c9a84c,#f0c040);color:#0a0e1a;padding:14px 32px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:15px;letter-spacing:1px;">
+                            RESET PASSWORD
+                        </a>
+                    </div>
+                    <p style="color:#64748b; font-size:13px;">If you didn't request this, you can safely ignore this email — your password will not change.</p>
+                    <p style="color:#64748b; font-size:13px;">Or copy this link: <a href="{reset_url}" style="color:#0ea5e9;">{reset_url}</a></p>
+                    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">
+                    <p style="color:#94a3b8;font-size:12px;text-align:center;">PAF Store — Official Collectibles</p>
+                </div>
+            </body>
+        </html>
+        """
+        msg.attach(MIMEText(html_body, "html"))
+
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(msg)
+
+        return True
+    except Exception as e:
+        print(f"Error sending reset email: {str(e)}")
+        return False
+
+
+async def send_password_reset_email_async(recipient_email: str, username: str, reset_url: str) -> bool:
+    """Send password reset email asynchronously"""
+    loop = asyncio.get_event_loop()
+    func = partial(send_password_reset_email, recipient_email=recipient_email, username=username, reset_url=reset_url)
+    return await loop.run_in_executor(None, func)
+
+
 async def send_order_confirmation_email_async(
     recipient_email: str,
     customer_name: str,

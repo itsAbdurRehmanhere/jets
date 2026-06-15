@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, UserProfile } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
+import { ErrorAlert, SuccessAlert } from "@/components/ui/Alert";
 
 export default function ProfilePage() {
-  const { user, login } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -73,17 +76,11 @@ export default function ProfilePage() {
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
-      <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-3xl mx-auto px-6 lg:px-8 py-10 text-center">
-          <p className="text-xs tracking-widest mb-3 uppercase" style={{ color: "var(--gold)" }}>PAF Store</p>
-          <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>MY PROFILE</h1>
-          <div className="divider-gold mx-auto mt-4" />
-        </div>
-      </div>
+      <PageHeader title="MY PROFILE" maxWidth="max-w-3xl" />
 
       <div className="max-w-3xl mx-auto px-6 lg:px-8 py-8 space-y-6">
         {loading ? (
-          <div className="rounded-2xl animate-pulse" style={{ background: "var(--bg-card)", height: 400 }} />
+          <LoadingSkeleton count={1} height={400} layout="single" />
         ) : (
           <>
             {/* Profile form */}
@@ -103,7 +100,7 @@ export default function ProfilePage() {
                   <div>
                     <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>PHONE</label>
                     <input value={profile?.phone || ""} onChange={e => setProfile(p => p ? {...p, phone: e.target.value} : p)}
-                      placeholder="+92 300 1234567" className="input-dark" />
+                      placeholder="+92 320 7331147" className="input-dark" />
                   </div>
                   <div>
                     <label className="block text-xs tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>CITY</label>
@@ -122,8 +119,8 @@ export default function ProfilePage() {
                     placeholder="Pakistan" className="input-dark" />
                 </div>
 
-                {msg && <div className="px-4 py-3 rounded-lg text-sm" style={{ background: "#22c55e20", color: "#22c55e", border: "1px solid #22c55e40" }}>{msg}</div>}
-                {error && <div className="px-4 py-3 rounded-lg text-sm" style={{ background: "#ef444420", color: "#ef4444", border: "1px solid #ef444440" }}>{error}</div>}
+                <SuccessAlert message={msg} />
+                <ErrorAlert message={error} />
 
                 <button type="submit" disabled={saving}
                   className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-widest uppercase disabled:opacity-60">
@@ -157,8 +154,8 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                {pwMsg && <div className="px-4 py-3 rounded-lg text-sm" style={{ background: "#22c55e20", color: "#22c55e", border: "1px solid #22c55e40" }}>{pwMsg}</div>}
-                {pwError && <div className="px-4 py-3 rounded-lg text-sm" style={{ background: "#ef444420", color: "#ef4444", border: "1px solid #ef444440" }}>{pwError}</div>}
+                <SuccessAlert message={pwMsg} />
+                <ErrorAlert message={pwError} />
 
                 <button type="submit" disabled={pwSaving}
                   className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-widest uppercase disabled:opacity-60">

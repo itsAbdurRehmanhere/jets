@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -40,10 +40,10 @@ export default function RegisterPage() {
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-4"
             style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
-            ✈
+            âœˆ
           </div>
-          <h1 className="text-3xl font-black tracking-wider" style={{ color: "var(--text-primary)" }}>CREATE ACCOUNT</h1>
-          <p className="text-sm mt-2 tracking-wide" style={{ color: "var(--text-muted)" }}>Join PAF Store today</p>
+          <h1 className="text-3xl font-black tracking-wider text-center" style={{ color: "var(--text-primary)" }}>CREATE ACCOUNT</h1>
+          <p className="text-sm mt-2 tracking-wide text-center" style={{ color: "var(--text-muted)" }}>Join PAF Store today</p>
         </div>
 
         <div className="card rounded-2xl p-8">
@@ -78,7 +78,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm mt-6" style={{ color: "var(--text-muted)" }}>
             Already have an account?{" "}
-            <Link href="/auth/login" className="font-bold hover:text-yellow-400 transition-colors" style={{ color: "var(--gold)" }}>
+            <Link href="/auth/login" className="font-bold hover:text-sky-500 transition-colors" style={{ color: "var(--gold)" }}>
               Sign in
             </Link>
           </p>
@@ -87,3 +87,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

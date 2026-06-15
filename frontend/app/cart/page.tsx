@@ -1,10 +1,14 @@
-"use client";
+﻿"use client";
 
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { AuthGuard } from "@/components/ui/AuthGuard";
 
 export default function CartPage() {
   const { cartItems, totalItems, totalPrice, updateItem, removeItem, clearCart, loading } = useCart();
@@ -13,27 +17,14 @@ export default function CartPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
-        <div className="text-center">
-          <div className="text-6xl mb-4 opacity-20">🛒</div>
-          <h2 className="text-2xl font-black mb-3" style={{ color: "var(--text-primary)" }}>Sign In Required</h2>
-          <p className="mb-6 text-sm" style={{ color: "var(--text-muted)" }}>Please log in to view your cart.</p>
-          <Link href="/auth/login" className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-widest uppercase">
-            LOGIN
-          </Link>
-        </div>
-      </div>
-    );
+    return <AuthGuard icon="ðŸ›’" message="Please log in to view your cart." />;
   }
 
   if (loading) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
-        <div className="max-w-5xl mx-auto px-4 py-12 space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="rounded-2xl animate-pulse" style={{ background: "var(--bg-card)", height: 120 }} />
-          ))}
+        <div className="max-w-5xl mx-auto px-4 py-12">
+          <LoadingSkeleton count={3} height={120} />
         </div>
       </div>
     );
@@ -41,28 +32,19 @@ export default function CartPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
-        <div className="text-center">
-          <div className="text-7xl mb-6 opacity-10">🛒</div>
-          <h2 className="text-3xl font-black mb-3" style={{ color: "var(--text-primary)" }}>Your Cart is Empty</h2>
-          <p className="mb-8 text-sm" style={{ color: "var(--text-muted)" }}>Discover our exclusive PAF collectibles</p>
-          <Link href="/products" className="btn-gold px-10 py-4 rounded-xl font-bold text-sm tracking-widest uppercase">
-            Browse Collection
-          </Link>
-        </div>
+      <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+        <EmptyState icon="ðŸ›’" title="Your Cart is Empty" description="Discover our exclusive PAF collectibles" ctaText="Browse Collection" />
       </div>
     );
   }
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
-      <div style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-          <p className="text-xs tracking-widest mb-2 uppercase" style={{ color: "var(--gold)" }}>PAF Store</p>
-          <h1 className="text-3xl sm:text-4xl font-black" style={{ color: "var(--text-primary)" }}>YOUR CART</h1>
-          <p className="mt-2 text-sm" style={{ color: "var(--text-muted)" }}>{totalItems} {totalItems === 1 ? "item" : "items"}</p>
-        </div>
-      </div>
+      <PageHeader
+        title="YOUR CART"
+        maxWidth="max-w-5xl"
+        subtitle={`${totalItems} ${totalItems === 1 ? "item" : "items"}`}
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -71,17 +53,17 @@ export default function CartPage() {
             {cartItems.map(item => (
               <div key={item.id} className="card rounded-2xl p-5 flex gap-5 items-center">
                 <Link href={`/products/${item.product_id}`}
-                  className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ background: "#0d1117" }}>
+                  className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ background: "#f1f5f9" }}>
                   {item.product?.images?.[0] ? (
                     <Image src={`${apiUrl}${item.product.images[0].url}`} alt={item.product.name} fill className="object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">✈</div>
+                    <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">âœˆ</div>
                   )}
                 </Link>
 
                 <div className="flex-1 min-w-0">
                   <Link href={`/products/${item.product_id}`}>
-                    <h3 className="font-semibold text-sm hover:text-yellow-400 transition-colors line-clamp-2"
+                    <h3 className="font-semibold text-sm hover:text-sky-500 transition-colors line-clamp-2"
                       style={{ color: "var(--text-primary)" }}>
                       {item.product?.name || `Product #${item.product_id}`}
                     </h3>
@@ -97,14 +79,14 @@ export default function CartPage() {
                 <div className="flex items-center gap-3 shrink-0">
                   <div className="flex items-center rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                     <button onClick={() => updateItem(item.id, item.quantity - 1)}
-                      className="px-4 py-3 text-sm transition-colors hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      style={{ color: "var(--text-muted)" }}>−</button>
+                      className="px-4 py-3 text-sm transition-colors hover:bg-black/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                      style={{ color: "var(--text-muted)" }}>âˆ’</button>
                     <span className="px-3 py-3 text-sm font-bold min-w-[2.5rem] text-center"
                       style={{ color: "var(--text-primary)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)" }}>
                       {item.quantity}
                     </span>
                     <button onClick={() => updateItem(item.id, item.quantity + 1)}
-                      className="px-4 py-3 text-sm transition-colors hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                      className="px-4 py-3 text-sm transition-colors hover:bg-black/5 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       style={{ color: "var(--text-muted)" }}>+</button>
                   </div>
                   <button onClick={() => removeItem(item.id)}
@@ -134,7 +116,7 @@ export default function CartPage() {
                 {cartItems.map(item => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="line-clamp-1 mr-2" style={{ color: "var(--text-muted)" }}>
-                      {item.product?.name || `Item`} × {item.quantity}
+                      {item.product?.name || `Item`} Ã— {item.quantity}
                     </span>
                     <span style={{ color: "var(--text-primary)" }}>
                       PKR {(Number(item.price) * item.quantity).toLocaleString()}
@@ -160,9 +142,9 @@ export default function CartPage() {
                 Secure payment via WhatsApp confirmation
               </p>
 
-              <Link href="/products" className="block text-center text-xs tracking-widest mt-4 transition-colors hover:text-yellow-400"
+              <Link href="/products" className="block text-center text-xs tracking-widest mt-4 transition-colors hover:text-sky-500"
                 style={{ color: "var(--text-muted)" }}>
-                ← Continue Shopping
+                â† Continue Shopping
               </Link>
             </div>
           </div>
@@ -171,3 +153,4 @@ export default function CartPage() {
     </div>
   );
 }
+

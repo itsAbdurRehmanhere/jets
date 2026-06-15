@@ -73,6 +73,12 @@ export const api = {
       }),
 
     me: () => request<User>("/auth/me"),
+
+    forgotPassword: (email: string) =>
+      request<{ message: string }>(`/auth/forgot-password?email=${encodeURIComponent(email)}`, { method: "POST" }),
+
+    resetPassword: (token: string, new_password: string) =>
+      request<{ message: string }>(`/auth/reset-password?token=${encodeURIComponent(token)}&new_password=${encodeURIComponent(new_password)}`, { method: "POST" }),
   },
 
   products: {
@@ -105,12 +111,28 @@ export const api = {
         Array.isArray(r) ? r : (r as { data: Category[] }).data ?? []
       ),
     create: (data: { name: string; description?: string }) =>
-      request<Category>("/categories", { method: "POST", body: JSON.stringify(data) }),
+      request<{ data: Category }>("/categories", { method: "POST", body: JSON.stringify(data) })
+        .then((r) => (r as { data: Category }).data ?? r),
+    update: (id: number, data: { name: string; description?: string }) =>
+      request<{ data: Category }>(`/categories/${id}`, { method: "PUT", body: JSON.stringify(data) })
+        .then((r) => (r as { data: Category }).data ?? r),
+    delete: (id: number) =>
+      request(`/categories/${id}`, { method: "DELETE" }),
   },
 
   productTypes: {
     byCategory: (categoryId: number) =>
-      request<ProductType[]>(`/product-types/category/${categoryId}`),
+      request<{ product_types: ProductType[]; total: number }>(`/product-types/category/${categoryId}`),
+    list: () =>
+      request<ProductType[]>(`/product-types/`).catch(() => [] as ProductType[]),
+    create: (data: { name: string; description?: string; category_id: number }) =>
+      request<{ data: ProductType }>("/product-types/", { method: "POST", body: JSON.stringify(data) })
+        .then(r => (r as { data: ProductType }).data),
+    update: (id: number, data: { name?: string; description?: string }) =>
+      request<{ data: ProductType }>(`/product-types/${id}`, { method: "PUT", body: JSON.stringify(data) })
+        .then(r => (r as { data: ProductType }).data),
+    delete: (id: number) =>
+      request(`/product-types/${id}`, { method: "DELETE" }),
   },
 
   cart: {
@@ -141,10 +163,10 @@ export const api = {
     checkout: (data: CheckoutPayload) =>
       request<Record<string, unknown>>("/orders/checkout", { method: "POST", body: JSON.stringify(data) })
         .then((r) => {
-          // Backend returns { message, order: { order_id, ... } }
           const raw = r as Record<string, unknown>;
           const orderRaw = (raw.order ?? raw) as Record<string, unknown>;
-          return normalizeOrder({ ...orderRaw, id: orderRaw.order_id ?? orderRaw.id });
+          const order = normalizeOrder({ ...orderRaw, id: orderRaw.order_id ?? orderRaw.id });
+          return { ...order, _easypaisa: raw.easypaisa as EasypaisaInitResponse | undefined };
         }),
 
     myOrders: () =>
@@ -192,8 +214,32 @@ export const api = {
       request<{ message: string }>("/profile/change-password", { method: "PUT", body: JSON.stringify(data) }),
   },
 
+  payment: {
+    initiateEasypaisa: (orderId: number) =>
+      request<EasypaisaInitResponse>(`/payment/easypaisa/initiate/${orderId}`, { method: "POST" }),
+
+    verifyEasypaisa: (orderNumber: string, responseCode: string) =>
+      request<{ success: boolean; order_id: number; payment_status: string }>(
+        `/payment/easypaisa/verify?order_number=${encodeURIComponent(orderNumber)}&response_code=${encodeURIComponent(responseCode)}`,
+        { method: "POST" }
+      ),
+  },
+
   admin: {
     stats: () => request<AdminStats>("/admin/stats"),
+
+    users: {
+      list: (params?: { skip?: number; limit?: number; search?: string }) => {
+        const qs = new URLSearchParams(
+          Object.entries(params || {}).filter(([, v]) => v !== undefined && v !== "").map(([k, v]) => [k, String(v)])
+        ).toString();
+        return request<{ data: AdminUser[]; total: number }>(`/admin/users${qs ? `?${qs}` : ""}`);
+      },
+      toggleAdmin: (id: number) =>
+        request<{ id: number; is_admin: boolean; message: string }>(`/admin/users/${id}/toggle-admin`, { method: "PUT" }),
+      delete: (id: number) =>
+        request(`/admin/users/${id}`, { method: "DELETE" }),
+    },
 
     products: {
       list: (params?: { skip?: number; limit?: number; category_id?: number; search?: string }) => {
@@ -350,6 +396,24 @@ export interface CheckoutPayload {
   shipping_country?: string;
   notes?: string;
   send_confirmation_email?: boolean;
+  payment_method?: string;
+}
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  email: string;
+  is_admin: boolean;
+  phone?: string;
+  city?: string;
+  order_count: number;
+}
+
+export interface EasypaisaInitResponse {
+  checkout_url: string;
+  params: Record<string, string>;
+  order_id: number;
+  order_number: string;
 }
 
 export interface AdminStats {

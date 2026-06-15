@@ -305,7 +305,7 @@ async def checkout(
             shipping_cost=shipping_cost,
             discount=0.0,
             total=total,
-            payment_method="pending",
+            payment_method=payload.payment_method,
             customer_notes=payload.customer_notes,
             order_status=OrderStatus.PENDING,
             payment_status=PaymentStatus.PENDING
@@ -353,7 +353,7 @@ async def checkout(
         db.query(CartItem).filter(CartItem.cart_id == cart.id).delete()
         db.commit()
         
-        return {
+        response_data: dict = {
             "message": "Order created successfully",
             "order": {
                 "order_id": order.id,
@@ -367,12 +367,42 @@ async def checkout(
                 "shipping_cost": order.shipping_cost,
                 "total": order.total,
                 "order_status": order.order_status,
+                "payment_method": order.payment_method,
                 "created_at": order.created_at
             },
             "items_count": len(order_items_data),
             "email_sent": payload.send_confirmation_email
         }
-    
+
+        # If EasyPaisa, generate payment form parameters
+        if payload.payment_method == "easypaisa":
+            import hmac as _hmac
+            import hashlib as _hashlib
+            from datetime import timedelta as _td
+            from app.core.config import EASYPAISA_STORE_ID, EASYPAISA_HASH_KEY, FRONTEND_URL
+
+            if EASYPAISA_STORE_ID and EASYPAISA_HASH_KEY:
+                amount_str = f"{order.total:.2f}"
+                postback = f"{FRONTEND_URL}/payment/callback"
+                tran_type = "MPAY"
+                token_expiry = (datetime.now() + _td(hours=1)).strftime("%Y%m%d%H%M%S")
+                msg = f"{EASYPAISA_STORE_ID}&{amount_str}&{postback}&{order.order_number}&{tran_type}&{token_expiry}"
+                sig = _hmac.new(EASYPAISA_HASH_KEY.encode(), msg.encode(), _hashlib.sha256).hexdigest()
+                response_data["easypaisa"] = {
+                    "checkout_url": "https://easypay.easypaisa.com.pk/tpay/Index.jsf",
+                    "params": {
+                        "storeId": EASYPAISA_STORE_ID,
+                        "amount": amount_str,
+                        "postBackURL": postback,
+                        "orderRefNum": order.order_number,
+                        "tran_type": tran_type,
+                        "tokenExpiry": token_expiry,
+                        "merchantHashedReq": sig,
+                    }
+                }
+
+        return response_data
+
     except HTTPException:
         db.rollback()
         raise

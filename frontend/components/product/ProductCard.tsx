@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -23,7 +23,7 @@ export default function ProductCard({ product }: Props) {
     e.preventDefault();
     if (product.stock === 0) return;
 
-    // Not logged in → redirect to login
+    // Not logged in â†’ redirect to login
     if (!user) {
       router.push("/auth/login");
       return;
@@ -52,14 +52,14 @@ export default function ProductCard({ product }: Props) {
   const isLowStock = product.stock > 0 && product.stock <= 5;
 
   return (
-    <div className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 flex flex-col">
-      <Link href={`/products/${product.id}`} className="block relative aspect-square overflow-hidden" style={{ background: "#0d1117" }}>
+    <div className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 flex flex-col">
+      <Link href={`/products/${product.id}`} className="block relative aspect-square overflow-hidden" style={{ background: "#f1f5f9" }}>
         {imgUrl ? (
           <Image src={imgUrl} alt={product.name || "Product image"} fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             unoptimized />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-7xl opacity-10">✈</div>
+          <div className="w-full h-full flex items-center justify-center text-7xl opacity-10">âœˆ</div>
         )}
         {/* Hover overlay */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
@@ -82,7 +82,7 @@ export default function ProductCard({ product }: Props) {
 
       <div className="p-5 flex flex-col flex-1">
         <Link href={`/products/${product.id}`}>
-          <h3 className="font-semibold text-sm tracking-wide line-clamp-2 hover:text-yellow-400 transition-colors"
+          <h3 className="font-semibold text-sm tracking-wide line-clamp-2 hover:text-sky-500 transition-colors"
             style={{ color: "var(--text-primary)" }}>
             {product.name}
           </h3>
@@ -104,7 +104,7 @@ export default function ProductCard({ product }: Props) {
             )}
           </div>
 
-          {/* Cart button — shows LOGIN if not authenticated */}
+          {/* Cart button â€” shows LOGIN if not authenticated */}
           {!user ? (
             <Link href="/auth/login"
               className="px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all min-h-[44px] flex items-center"
@@ -123,7 +123,7 @@ export default function ProductCard({ product }: Props) {
                     ? { background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }
                     : { background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }
               }>
-              {adding ? "..." : added ? "✓ ADDED" : isOutOfStock ? "SOLD OUT" : "+ CART"}
+              {adding ? "..." : added ? "âœ“ ADDED" : isOutOfStock ? "SOLD OUT" : "+ CART"}
             </button>
           )}
         </div>
@@ -131,3 +131,4 @@ export default function ProductCard({ product }: Props) {
     </div>
   );
 }
+

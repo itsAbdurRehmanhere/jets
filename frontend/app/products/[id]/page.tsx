@@ -74,9 +74,9 @@ export default function ProductDetailPage() {
       <div className="max-w-6xl mx-auto px-4 py-10">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs tracking-wider mb-8" style={{ color: "var(--text-muted)" }}>
-          <Link href="/" className="hover:text-yellow-400 transition-colors">HOME</Link>
+          <Link href="/" className="hover:text-sky-500 transition-colors">HOME</Link>
           <span>›</span>
-          <Link href="/products" className="hover:text-yellow-400 transition-colors">PRODUCTS</Link>
+          <Link href="/products" className="hover:text-sky-500 transition-colors">PRODUCTS</Link>
           <span>›</span>
           <span style={{ color: "var(--gold)" }}>{product.name.toUpperCase()}</span>
         </nav>
@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Image gallery */}
           <div className="space-y-3">
-            <div className="relative rounded-2xl overflow-hidden aspect-square w-full" style={{ background: "#0d1117" }}>
+            <div className="relative rounded-2xl overflow-hidden aspect-square w-full" style={{ background: "#f1f5f9" }}>
               {selectedImage ? (
                 <Image src={`${apiUrl}${selectedImage.url}`} alt={product.name || "Product image"}
                   fill className="object-cover" priority />
@@ -99,7 +99,7 @@ export default function ProductDetailPage() {
                     className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden transition-all"
                     style={{
                       border: selectedImage?.id === img.id ? "2px solid var(--gold)" : "2px solid var(--border)",
-                      background: "#0d1117"
+                      background: "#f1f5f9"
                     }}>
                     <Image src={`${apiUrl}${img.url}`} alt="" fill className="object-cover" />
                   </button>
@@ -149,14 +149,14 @@ export default function ProductDetailPage() {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <div className="flex items-center rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                   <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                    className="px-4 py-3 transition-colors hover:bg-white/5 text-lg font-bold"
+                    className="px-4 py-3 transition-colors hover:bg-black/5 text-lg font-bold"
                     style={{ color: "var(--text-muted)" }}>−</button>
                   <span className="px-5 py-3 text-sm font-bold min-w-[3rem] text-center"
                     style={{ color: "var(--text-primary)", borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)" }}>
                     {quantity}
                   </span>
                   <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-                    className="px-4 py-3 transition-colors hover:bg-white/5 text-lg font-bold"
+                    className="px-4 py-3 transition-colors hover:bg-black/5 text-lg font-bold"
                     style={{ color: "var(--text-muted)" }}>+</button>
                 </div>
 
@@ -173,14 +173,14 @@ export default function ProductDetailPage() {
             {/* Go to cart */}
             {inStock && (
               <Link href="/cart"
-                className="w-full text-center py-3 rounded-xl font-bold text-sm tracking-widest uppercase transition-colors hover:bg-white/5"
+                className="w-full text-center py-3 rounded-xl font-bold text-sm tracking-widest uppercase transition-colors hover:bg-black/5"
                 style={{ border: "1px solid var(--border)", color: "var(--text-muted)" }}>
                 View Cart & Checkout
               </Link>
             )}
 
             {/* How it works */}
-            <div className="rounded-xl p-5" style={{ background: "#0d1b2a", border: "1px solid #1e3a5f" }}>
+            <div className="rounded-xl p-5" style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
               <p className="font-bold text-sm mb-2 tracking-wide" style={{ color: "var(--gold)" }}>
                 HOW ORDERING WORKS
               </p>

@@ -1,21 +1,19 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, Order } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
+import { StatusBadge, STATUS_COLORS } from "@/components/ui/StatusBadge";
+import { SuccessAlert, ErrorAlert } from "@/components/ui/Alert";
 
 const STATUS_TABS = ["all", "pending", "processing", "shipped", "delivered", "cancelled"];
 
-const statusColors: Record<string, { bg: string; color: string }> = {
-  pending:    { bg: "#f59e0b20", color: "#f59e0b" },
-  confirmed:  { bg: "#3b82f620", color: "#60a5fa" },
-  processing: { bg: "#8b5cf620", color: "#a78bfa" },
-  shipped:    { bg: "#0ea5e920", color: "#38bdf8" },
-  delivered:  { bg: "#22c55e20", color: "#22c55e" },
-  cancelled:  { bg: "#ef444420", color: "#ef4444" },
-  refunded:   { bg: "#f4363620", color: "#f43636" },
+const extendedColors: Record<string, { bg: string; color: string }> = {
+  ...STATUS_COLORS,
+  refunded: { bg: "#f4363620", color: "#f43636" },
 };
 
 const ORDER_STATUSES = ["pending", "processing", "shipped", "delivered", "cancelled"];
@@ -80,7 +78,7 @@ export default function AdminOrdersPage() {
     setSaveMsg("");
     try {
       await api.orders.updateStatus(editOrder.id, editStatus, editPayment, editNotes);
-      setSaveMsg("✓ Updated successfully");
+      setSaveMsg("âœ“ Updated successfully");
       fetchOrders();
       setTimeout(() => { setEditOrder(null); setSaveMsg(""); }, 800);
     } catch (err) {
@@ -108,8 +106,8 @@ export default function AdminOrdersPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Link href="/admin" className="text-xs tracking-widest hover:text-yellow-400 transition-colors"
-                  style={{ color: "var(--text-muted)" }}>← DASHBOARD</Link>
+                <Link href="/admin" className="text-xs tracking-widest hover:text-sky-500 transition-colors"
+                  style={{ color: "var(--text-muted)" }}>â† DASHBOARD</Link>
               </div>
               <p className="text-xs tracking-widest uppercase" style={{ color: "var(--gold)" }}>Admin Panel</p>
               <h1 className="text-2xl sm:text-3xl font-black" style={{ color: "var(--text-primary)" }}>
@@ -160,14 +158,10 @@ export default function AdminOrdersPage() {
 
         {/* Orders Table */}
         {loading ? (
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="rounded-xl animate-pulse" style={{ background: "var(--bg-card)", height: 64 }} />
-            ))}
-          </div>
+          <LoadingSkeleton count={5} height={64} />
         ) : orders.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4 opacity-20">📦</div>
+            <div className="text-5xl mb-4 opacity-20">ðŸ“¦</div>
             <p className="text-lg font-bold" style={{ color: "var(--text-muted)" }}>No orders found</p>
           </div>
         ) : (
@@ -185,8 +179,7 @@ export default function AdminOrdersPage() {
               </thead>
               <tbody>
                 {orders.map((order, idx) => {
-                  const sc = statusColors[order.status] || { bg: "#ffffff10", color: "var(--text-muted)" };
-                  const pc = statusColors[order.payment_status || "pending"] || { bg: "#ffffff10", color: "var(--text-muted)" };
+                  const pc = extendedColors[order.payment_status || "pending"] || { bg: "#ffffff10", color: "var(--text-muted)" };
                   return (
                     <tr key={order.id}
                       style={{
@@ -200,14 +193,14 @@ export default function AdminOrdersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
-                          {order.customer_name || "—"}
+                          {order.customer_name || "â€”"}
                         </div>
                         <div className="text-xs" style={{ color: "var(--text-muted)" }}>
                           {order.customer_email || ""}
                         </div>
                       </td>
                       <td className="px-4 py-3 text-xs" style={{ color: "var(--text-muted)" }}>
-                        {order.items?.length ?? "—"}
+                        {order.items?.length ?? "â€”"}
                       </td>
                       <td className="px-4 py-3">
                         <span className="font-bold text-xs text-gold-gradient">
@@ -215,10 +208,7 @@ export default function AdminOrdersPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase"
-                          style={{ background: sc.bg, color: sc.color }}>
-                          {order.status}
-                        </span>
+                        <StatusBadge status={order.status} size="sm" />
                       </td>
                       <td className="px-4 py-3">
                         <span className="px-2 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase"
@@ -255,18 +245,18 @@ export default function AdminOrdersPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between">
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Showing {page * limit + 1}–{Math.min((page + 1) * limit, total)} of {total}
+              Showing {page * limit + 1}â€“{Math.min((page + 1) * limit, total)} of {total}
             </p>
             <div className="flex gap-2">
               <button disabled={page === 0} onClick={() => setPage(p => p - 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                ← Prev
+                â† Prev
               </button>
               <button disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}
                 className="px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40"
                 style={{ background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
-                Next →
+                Next â†’
               </button>
             </div>
           </div>
@@ -287,11 +277,11 @@ export default function AdminOrdersPage() {
                   #{editOrder.order_number || editOrder.id}
                 </h2>
                 <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-                  {editOrder.customer_name} · {editOrder.customer_email}
+                  {editOrder.customer_name} Â· {editOrder.customer_email}
                 </p>
               </div>
               <button onClick={() => setEditOrder(null)}
-                className="text-xl leading-none" style={{ color: "var(--text-muted)" }}>✕</button>
+                className="text-xl leading-none" style={{ color: "var(--text-muted)" }}>âœ•</button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -334,7 +324,7 @@ export default function AdminOrdersPage() {
                 <p className="text-xs font-bold tracking-widest uppercase" style={{ color: "var(--gold)" }}>Items</p>
                 {editOrder.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-xs" style={{ color: "var(--text-muted)" }}>
-                    <span>{item.product_name} × {item.quantity}</span>
+                    <span>{item.product_name} Ã— {item.quantity}</span>
                     <span>PKR {(Number(item.price) * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
@@ -345,13 +335,9 @@ export default function AdminOrdersPage() {
               </div>
             )}
 
-            {saveMsg && (
-              <div className="px-4 py-2 rounded-lg text-sm text-center"
-                style={saveMsg.startsWith("✓")
-                  ? { background: "#22c55e20", color: "#22c55e", border: "1px solid #22c55e40" }
-                  : { background: "#ef444420", color: "#ef4444", border: "1px solid #ef444440" }}>
-                {saveMsg}
-              </div>
+            {saveMsg && (saveMsg.startsWith("âœ“")
+              ? <SuccessAlert message={saveMsg} />
+              : <ErrorAlert message={saveMsg} />
             )}
 
             <div className="flex gap-3">
@@ -371,3 +357,4 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
+

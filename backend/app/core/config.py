@@ -14,4 +14,11 @@ SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER", "your-email@gmail.com")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "your-app-password")
-SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "noreply@aircraftstore.com")
+SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "noreply@pafstore.pk")
+
+# App URLs
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+# EasyPaisa merchant credentials
+EASYPAISA_STORE_ID = os.getenv("EASYPAISA_STORE_ID", "")
+EASYPAISA_HASH_KEY = os.getenv("EASYPAISA_HASH_KEY", "")

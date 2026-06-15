@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -135,3 +135,72 @@ async def get_dashboard_stats(
             for o in recent_orders
         ]
     }
+
+
+# ─── User Management ──────────────────────────────────────────────────────────
+
+@router.get("/users")
+async def list_users(
+    skip: int = 0,
+    limit: int = 50,
+    search: str = "",
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin)
+):
+    """List all registered users."""
+    q = db.query(User)
+    if search:
+        q = q.filter(
+            User.email.ilike(f"%{search}%") | User.username.ilike(f"%{search}%")
+        )
+    total = q.count()
+    users = q.order_by(User.id.desc()).offset(skip).limit(limit).all()
+    return {
+        "data": [
+            {
+                "id": u.id,
+                "username": u.username,
+                "email": u.email,
+                "is_admin": u.is_admin,
+                "phone": u.phone,
+                "city": u.city,
+                "order_count": db.query(Order).filter(Order.user_id == u.id).count(),
+            }
+            for u in users
+        ],
+        "total": total,
+    }
+
+
+@router.put("/users/{user_id}/toggle-admin")
+async def toggle_admin(
+    user_id: int,
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin)
+):
+    """Promote or demote a user's admin status."""
+    if user_id == admin["user_id"]:
+        raise HTTPException(status_code=400, detail="Cannot change your own admin status")
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.is_admin = not user.is_admin
+    db.commit()
+    return {"id": user.id, "is_admin": user.is_admin, "message": f"{'Promoted to' if user.is_admin else 'Removed from'} admin"}
+
+
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin)
+):
+    """Delete a user account (and cascade their data)."""
+    if user_id == admin["user_id"]:
+        raise HTTPException(status_code=400, detail="Cannot delete your own account")
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(user)
+    db.commit()
+    return {"message": "User deleted"}

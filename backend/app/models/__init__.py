@@ -6,13 +6,14 @@ from app.models.product_image import ProductImage
 from app.models.order import Order, OrderStatus, PaymentStatus
 from app.models.order_item import OrderItem
 from app.models.cart import Cart, CartItem
+from app.models.password_reset import PasswordResetToken
 from app.core.database import Base
 
 __all__ = [
-    "User", 
+    "User",
     "Category",
     "ProductType",
-    "Product", 
+    "Product",
     "ProductImage",
     "Order",
     "OrderItem",
@@ -20,5 +21,6 @@ __all__ = [
     "CartItem",
     "OrderStatus",
     "PaymentStatus",
+    "PasswordResetToken",
     "Base"
 ]

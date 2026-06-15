@@ -61,7 +61,8 @@ class CheckoutSchema(BaseModel):
     shipping_city: str = Field(..., min_length=2, max_length=100)
     customer_notes: Optional[str] = None
     send_confirmation_email: bool = True
-    
+    payment_method: str = "cod"  # "cod" | "easypaisa"
+
     @validator('customer_email')
     def validate_email(cls, v):
         if '@' not in v:

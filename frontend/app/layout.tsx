@@ -20,12 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col" style={{ background: "#0a0e1a" }}>
+    <html lang="en" className={`${geist.variable} w-full h-full antialiased`}>
+      <body className="w-full min-h-full flex flex-col" style={{ background: "var(--bg-primary)" }}>
         <AuthProvider>
           <CartProvider>
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <main className="w-full flex-1">{children}</main>
             <Footer />
           </CartProvider>
         </AuthProvider>

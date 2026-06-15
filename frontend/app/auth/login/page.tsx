@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -42,12 +42,12 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-4"
             style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
-            ✈
+            âœˆ
           </div>
-          <h1 className="text-3xl font-black tracking-wider" style={{ color: "var(--text-primary)" }}>
+          <h1 className="text-3xl font-black tracking-wider text-center" style={{ color: "var(--text-primary)" }}>
             WELCOME BACK
           </h1>
-          <p className="text-sm mt-2 tracking-wide" style={{ color: "var(--text-muted)" }}>
+          <p className="text-sm mt-2 tracking-wide text-center" style={{ color: "var(--text-muted)" }}>
             Sign in to your PAF Store account
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function LoginPage() {
               <input
                 type="password" required value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 className="input-dark"
               />
             </div>
@@ -90,14 +90,22 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm mt-6" style={{ color: "var(--text-muted)" }}>
-            Don&apos;t have an account?{" "}
-            <Link href="/auth/register" className="font-bold hover:text-yellow-400 transition-colors" style={{ color: "var(--gold)" }}>
-              Register
+          <div className="flex items-center justify-between mt-6 text-sm">
+            <Link href="/auth/forgot-password"
+              className="hover:text-sky-500 transition-colors text-xs tracking-wide"
+              style={{ color: "var(--text-muted)" }}>
+              Forgot password?
             </Link>
-          </p>
+            <span style={{ color: "var(--text-muted)" }}>
+              No account?{" "}
+              <Link href="/auth/register" className="font-bold hover:text-sky-500 transition-colors" style={{ color: "var(--gold)" }}>
+                Register
+              </Link>
+            </span>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+

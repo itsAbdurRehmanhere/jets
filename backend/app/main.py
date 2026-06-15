@@ -5,7 +5,7 @@ from sqlalchemy import text
 import os
 from pathlib import Path
 
-from app.routes import auth, categories, product, uploads, order, cart, product_type, profile, admin
+from app.routes import auth, categories, product, uploads, order, cart, product_type, profile, admin, payment
 from app.core.database import engine, Base
 from app.init_db import create_tables, create_default_admin
 
@@ -64,6 +64,7 @@ app.include_router(order.router)
 app.include_router(cart.router)
 app.include_router(profile.router)
 app.include_router(admin.router)
+app.include_router(payment.router)
 
 # Serve static files (uploaded images)
 app.mount("/media", StaticFiles(directory=str(UPLOAD_DIR)), name="media")

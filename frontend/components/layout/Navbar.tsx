@@ -31,21 +31,24 @@ export default function Navbar() {
     { label: "JET MODELS", href: "/products?category_id=1" },
     { label: "SCULPTURES", href: "/products?category_id=2" },
     { label: "TROPHIES", href: "/products?category_id=3" },
+    { label: "ACCESSORIES", href: "/products?category_id=4" },
+    { label: "ABOUT", href: "/about" },
   ];
 
   return (
     <header
       className="sticky top-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? "rgba(10,14,26,0.97)" : "rgba(10,14,26,0.85)",
+        background: scrolled ? "rgba(255,255,255,0.97)" : "rgba(255,255,255,0.88)",
         backdropFilter: "blur(12px)",
-        borderBottom: `1px solid ${scrolled ? "#1e2d45" : "transparent"}`,
+        borderBottom: `1px solid ${scrolled ? "var(--border)" : "transparent"}`,
+        boxShadow: scrolled ? "0 1px 12px rgba(0,0,0,0.08)" : "none",
       }}
     >
       {/* Announcement bar */}
       <div className="hidden md:block text-xs text-center py-1.5"
-        style={{ background: "#0d1117", borderBottom: "1px solid #1e2d45" }}>
-        <span style={{ color: "var(--gold)", letterSpacing: "0.1em" }}>
+        style={{ background: "linear-gradient(135deg, var(--gold-dark), var(--gold-light))", borderBottom: "1px solid var(--border-gold)" }}>
+        <span style={{ color: "#ffffff", letterSpacing: "0.1em", fontWeight: 700 }}>
           ✈ FREE SHIPPING ON ORDERS OVER PKR 5,000 &nbsp;|&nbsp; ORDER VIA WHATSAPP: +92 320 7331147
         </span>
       </div>
@@ -69,13 +72,13 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-semibold tracking-widest flex-1 justify-center">
           {navLinks.map(link => (
             <Link key={link.href} href={link.href}
-              className="transition-colors hover:text-yellow-400 whitespace-nowrap"
+              className="transition-colors hover:text-sky-500 whitespace-nowrap"
               style={{ color: "var(--text-muted)" }}>
               {link.label}
             </Link>
           ))}
           {isAdmin && (
-            <Link href="/admin" className="transition-colors hover:text-yellow-300 whitespace-nowrap"
+            <Link href="/admin" className="transition-colors hover:text-sky-400 whitespace-nowrap"
               style={{ color: "var(--gold)" }}>
               ADMIN
             </Link>
@@ -86,7 +89,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
 
           {/* Cart */}
-          <Link href="/cart" className="relative p-2 rounded-lg transition-colors hover:bg-white/5">
+          <Link href="/cart" className="relative p-2 rounded-lg transition-colors hover:bg-black/5">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
               style={{ color: "var(--text-muted)" }}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -104,7 +107,7 @@ export default function Navbar() {
           {user ? (
             <div className="relative" onClick={e => e.stopPropagation()}>
               <button onClick={() => setMenuOpen(o => !o)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors hover:bg-white/5">
+                className="flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors hover:bg-black/5">
                 <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black"
                   style={{ background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }}>
                   {user.username?.[0]?.toUpperCase()}
@@ -117,18 +120,18 @@ export default function Navbar() {
                 <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-2xl py-1 z-50"
                   style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
                   <Link href="/orders" onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-black/5"
                     style={{ color: "var(--text-muted)" }}>
                     📦 My Orders
                   </Link>
                   <Link href="/profile" onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-black/5"
                     style={{ color: "var(--text-muted)" }}>
                     👤 Profile
                   </Link>
                   <div style={{ height: "1px", background: "var(--border)", margin: "4px 0" }} />
                   <button onClick={() => { logout(); setMenuOpen(false); }}
-                    className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                    className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-red-50"
                     style={{ color: "#ef4444" }}>
                     🚪 Logout
                   </button>
@@ -143,7 +146,7 @@ export default function Navbar() {
           )}
 
           {/* Mobile hamburger */}
-          <button className="md:hidden p-2 rounded-lg transition-colors hover:bg-white/5"
+          <button className="md:hidden p-2 rounded-lg transition-colors hover:bg-black/5"
             onClick={() => setMobileOpen(o => !o)}
             style={{ color: "var(--text-muted)" }}>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -158,18 +161,18 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden px-4 pb-4 pt-2 space-y-1"
-          style={{ borderTop: "1px solid var(--border)", background: "rgba(10,14,26,0.98)" }}>
+          style={{ borderTop: "1px solid var(--border)", background: "rgba(255,255,255,0.98)" }}>
           {navLinks.map(link => (
             <Link key={link.href} href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="flex items-center px-4 py-3 rounded-xl text-sm tracking-widest font-medium transition-colors hover:bg-white/5"
+              className="flex items-center px-4 py-3 rounded-xl text-sm tracking-widest font-medium transition-colors hover:bg-sky-50"
               style={{ color: "var(--text-muted)" }}>
               {link.label}
             </Link>
           ))}
           {isAdmin && (
             <Link href="/admin" onClick={() => setMobileOpen(false)}
-              className="flex items-center px-4 py-3 rounded-xl text-sm tracking-widest font-medium transition-colors hover:bg-white/5"
+              className="flex items-center px-4 py-3 rounded-xl text-sm tracking-widest font-medium transition-colors hover:bg-black/5"
               style={{ color: "var(--gold)" }}>
               ADMIN
             </Link>
