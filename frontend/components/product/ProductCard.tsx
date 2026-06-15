@@ -124,7 +124,7 @@ export default function ProductCard({ product }: Props) {
                     ? { background: "var(--bg-card)", color: "var(--text-muted)", border: "1px solid var(--border)" }
                     : { background: "linear-gradient(135deg, var(--gold-light), var(--gold))", color: "#0a0e1a" }
               }>
-              {adding ? “...” : added ? “✓ ADDED” : isOutOfStock ? “SOLD OUT” : “+ CART”}
+              {adding ? "..." : added ? "✓ ADDED" : isOutOfStock ? "SOLD OUT" : "+ CART"}
             </button>
           )}
         </div>
