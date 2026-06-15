@@ -1,4 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const _rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = typeof window !== "undefined" && window.location.protocol === "https:"
+  ? _rawApiUrl.replace(/^http:\/\//, "https://")
+  : _rawApiUrl;
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
