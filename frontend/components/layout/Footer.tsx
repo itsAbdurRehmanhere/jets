@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14 md:py-16">
 
         {/* Top grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-12">
 
           {/* Brand — spans 2 cols on md */}
           <div className="sm:col-span-2">
@@ -66,6 +66,24 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+
+          {/* Legal links */}
+          <div>
+            <h4 className="text-xs font-black tracking-widest mb-5 uppercase" style={{ color: "var(--gold)" }}>Legal</h4>
+            <ul className="space-y-3">
+              {[
+                { label: "Terms of Service", href: "/terms" },
+                { label: "Privacy Policy", href: "/privacy" },
+                { label: "Refund Policy", href: "/refund" },
+                { label: "About Us", href: "/about" },
+              ].map(l => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-sm transition-colors hover:text-sky-500"
+                    style={{ color: "var(--text-muted)" }}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Divider */}
@@ -75,7 +93,12 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-center sm:text-left"
           style={{ color: "var(--text-muted)" }}>
           <p>© {new Date().getFullYear()} PAF Store. All rights reserved.</p>
-          <p className="tracking-wider">FREE SHIPPING ON ORDERS OVER PKR 10,000</p>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link href="/terms" className="hover:text-sky-500 transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-sky-500 transition-colors">Privacy</Link>
+            <Link href="/refund" className="hover:text-sky-500 transition-colors">Refunds</Link>
+            <span className="tracking-wider hidden sm:inline">FREE SHIPPING ON ORDERS OVER PKR 10,000</span>
+          </div>
         </div>
 
       </div>

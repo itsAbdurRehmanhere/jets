@@ -20,6 +20,7 @@ export default function OrderDetailPage() {
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   useEffect(() => {
@@ -45,6 +46,19 @@ export default function OrderDetailPage() {
   if (!order) return null;
 
   const currentStep = statusSteps.indexOf(order.status);
+
+  async function handleCancel() {
+    if (!confirm("Cancel this order?")) return;
+    setCancelling(true);
+    try {
+      await api.orders.cancel(Number(id));
+      setOrder(o => o ? { ...o, status: "cancelled" } : o);
+    } catch {
+      alert("Failed to cancel order. Please contact us on WhatsApp.");
+    } finally {
+      setCancelling(false);
+    }
+  }
 
   return (
     <div style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
@@ -156,15 +170,22 @@ export default function OrderDetailPage() {
         </div>
 
         {order.status === "pending" && (
-          <div className="rounded-2xl p-6 text-center" style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
-            <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
+          <div className="rounded-2xl p-6" style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
+            <p className="text-sm mb-4 text-center" style={{ color: "var(--text-muted)" }}>
               Questions about your order? Contact us on WhatsApp.
             </p>
-            <a href={`https://wa.me/923207331147?text=Hi, I have a question about order #${order.order_number || order.id}`}
-              target="_blank" rel="noopener noreferrer"
-              className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-wider inline-block">
-              💬 WhatsApp Us
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a href={`https://wa.me/923207331147?text=Hi, I have a question about order #${order.order_number || order.id}`}
+                target="_blank" rel="noopener noreferrer"
+                className="btn-gold px-8 py-3 rounded-xl font-bold text-sm tracking-wider inline-block">
+                💬 WhatsApp Us
+              </a>
+              <button onClick={handleCancel} disabled={cancelling}
+                className="px-8 py-3 rounded-xl font-bold text-sm tracking-wider border transition-colors hover:bg-red-50 disabled:opacity-50"
+                style={{ borderColor: "#ef4444", color: "#ef4444" }}>
+                {cancelling ? "Cancelling..." : "Cancel Order"}
+              </button>
+            </div>
           </div>
         )}
       </div>

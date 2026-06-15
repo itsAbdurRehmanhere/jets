@@ -24,8 +24,6 @@ export default function CheckoutPage() {
     shipping_country: "Pakistan",
     notes: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "easypaisa">("cod");
-  const [redirecting, setRedirecting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -65,29 +63,9 @@ export default function CheckoutPage() {
         shipping_country: form.shipping_country,
         notes: form.notes || undefined,
         send_confirmation_email: false,
-        payment_method: paymentMethod,
+        payment_method: "cod",
       });
       await refreshCart();
-
-      // EasyPaisa: auto-submit hidden form to redirect browser
-      const ep = (order as typeof order & { _easypaisa?: { checkout_url: string; params: Record<string, string> } })._easypaisa;
-      if (paymentMethod === "easypaisa" && ep) {
-        setRedirecting(true);
-        const form_ = document.createElement("form");
-        form_.method = "POST";
-        form_.action = ep.checkout_url;
-        Object.entries(ep.params).forEach(([k, v]) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = k;
-          input.value = v;
-          form_.appendChild(input);
-        });
-        document.body.appendChild(form_);
-        form_.submit();
-        return;
-      }
-
       router.push(`/orders/${order.id}?placed=1`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Checkout failed. Please try again.");
@@ -175,46 +153,40 @@ export default function CheckoutPage() {
               <div className="card rounded-2xl p-6">
                 <h3 className="text-xs font-bold tracking-widest mb-5" style={{ color: "var(--gold)" }}>PAYMENT METHOD</h3>
                 <div className="space-y-3">
-                  {/* COD */}
-                  <label className={`flex items-start gap-4 rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === "cod" ? "ring-2 ring-yellow-400" : ""}`}
-                    style={{ border: `1px solid ${paymentMethod === "cod" ? "var(--gold)" : "var(--border)"}`, background: paymentMethod === "cod" ? "var(--gold)08" : "transparent" }}>
-                    <input type="radio" name="payment" value="cod" checked={paymentMethod === "cod"}
-                      onChange={() => setPaymentMethod("cod")} className="mt-1 accent-yellow-500" />
+                  <div className="flex items-start gap-4 rounded-xl p-4 ring-2 ring-yellow-400"
+                    style={{ border: "1px solid var(--gold)", background: "rgba(234,179,8,0.04)" }}>
+                    <div className="mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0"
+                      style={{ borderColor: "var(--gold)" }}>
+                      <div className="w-2 h-2 rounded-full" style={{ background: "var(--gold)" }} />
+                    </div>
                     <div>
                       <div className="font-bold text-sm tracking-wide" style={{ color: "var(--text-primary)" }}>💬 Cash on Delivery / WhatsApp</div>
                       <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--text-muted)" }}>
                         Place order now — our team contacts you on WhatsApp to confirm and share payment details.
                       </p>
                     </div>
-                  </label>
-                  {/* EasyPaisa */}
-                  <label className={`flex items-start gap-4 rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === "easypaisa" ? "ring-2 ring-green-400" : ""}`}
-                    style={{ border: `1px solid ${paymentMethod === "easypaisa" ? "#22c55e" : "var(--border)"}`, background: paymentMethod === "easypaisa" ? "#22c55e08" : "transparent" }}>
-                    <input type="radio" name="payment" value="easypaisa" checked={paymentMethod === "easypaisa"}
-                      onChange={() => setPaymentMethod("easypaisa")} className="mt-1 accent-green-500" />
+                  </div>
+                  <div className="flex items-start gap-4 rounded-xl p-4 opacity-50"
+                    style={{ border: "1px solid var(--border)" }}>
+                    <div className="mt-0.5 w-4 h-4 rounded-full border-2 shrink-0" style={{ borderColor: "var(--border)" }} />
                     <div>
-                      <div className="font-bold text-sm tracking-wide flex items-center gap-2" style={{ color: "var(--text-primary)" }}>
-                        <span className="text-green-600 font-black">EP</span> EasyPaisa
+                      <div className="font-bold text-sm tracking-wide flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+                        <span className="font-black">EP</span> EasyPaisa
+                        <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: "#f59e0b20", color: "#f59e0b" }}>Coming Soon</span>
                       </div>
-                      <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--text-muted)" }}>
-                        Pay instantly via EasyPaisa mobile account, debit card, or EasyPaisa app. You will be redirected to the secure EasyPaisa payment page.
+                      <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                        Online payment via EasyPaisa will be available soon.
                       </p>
                     </div>
-                  </label>
+                  </div>
                 </div>
               </div>
 
               <ErrorAlert message={error} />
 
-              <button type="submit" disabled={loading || redirecting}
+              <button type="submit" disabled={loading}
                 className="btn-gold w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase disabled:opacity-60">
-                {redirecting
-                  ? "Redirecting to EasyPaisa..."
-                  : loading
-                  ? "Placing Order..."
-                  : paymentMethod === "easypaisa"
-                  ? "PLACE ORDER & PAY WITH EASYPAISA"
-                  : "PLACE ORDER"}
+                {loading ? "Placing Order..." : "PLACE ORDER"}
               </button>
             </form>
           </div>

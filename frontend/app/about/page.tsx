@@ -85,8 +85,8 @@ export default function AboutPage() {
               {
                 icon: "📧",
                 title: "Email",
-                info: "pafstore@example.pk",
-                href: "mailto:pafstore@example.pk",
+                info: "mabdurrehman089@gmail.com",
+                href: "mailto:mabdurrehman089@gmail.com",
                 label: "Send Email",
               },
               {

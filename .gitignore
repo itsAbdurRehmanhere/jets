@@ -1,0 +1,5 @@
+# Claude Code — developer tooling only, not needed for deployment
+.claude/
+
+# Environment files with secrets — never commit these
+backend/.env

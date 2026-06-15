@@ -9,13 +9,16 @@ from app.routes import auth, categories, product, uploads, order, cart, product_
 from app.core.database import engine, Base
 from app.init_db import create_tables, create_default_admin
 
-# Create uploads directory if it doesn't exist
-UPLOAD_DIR = Path("app/uploads")
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-
-# Create products subdirectory
+# On Vercel the filesystem is read-only; use /tmp as fallback
+import os as _os
+_on_vercel = bool(_os.environ.get("VERCEL"))
+UPLOAD_DIR = Path("/tmp/uploads") if _on_vercel else Path("app/uploads")
 PRODUCTS_UPLOAD_DIR = UPLOAD_DIR / "products"
-PRODUCTS_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    PRODUCTS_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
 
 app = FastAPI(
     title="Your API",
@@ -66,8 +69,9 @@ app.include_router(profile.router)
 app.include_router(admin.router)
 app.include_router(payment.router)
 
-# Serve static files (uploaded images)
-app.mount("/media", StaticFiles(directory=str(UPLOAD_DIR)), name="media")
+# Serve static files (uploaded images) — only if directory exists
+if UPLOAD_DIR.exists():
+    app.mount("/media", StaticFiles(directory=str(UPLOAD_DIR)), name="media")
 
 @app.get("/")
 async def root():
