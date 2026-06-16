@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { api, API_URL, Product, Category } from "@/lib/api";
+import { api, imageUrl, Product, Category } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { SuccessAlert, ErrorAlert } from "@/components/ui/Alert";
@@ -265,7 +265,7 @@ export default function AdminProductsPage() {
               <tbody>
                 {products.map((product, idx) => {
                   const cat = categories.find(c => c.id === product.category_id);
-                  const imgUrl = product.images?.[0] ? `${API_URL}${product.images[0].url}` : null;
+                  const imgUrl = imageUrl(product.images?.[0]?.url);
                   return (
                     <tr key={product.id}
                       style={{
@@ -465,7 +465,7 @@ export default function AdminProductsPage() {
                   {activeProduct.images.map((img) => (
                     <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-square"
                       style={{ background: "var(--bg-card)" }}>
-                      <Image src={`${API_URL}${img.url}`} alt="Product" fill className="object-cover" unoptimized />
+                      <Image src={imageUrl(img.url)!} alt="Product" fill className="object-cover" unoptimized />
                       {img.is_primary && (
                         <span className="absolute top-1 left-1 text-xs px-1.5 py-0.5 rounded font-bold"
                           style={{ background: "var(--gold)", color: "#0a0e1a" }}>Primary</span>

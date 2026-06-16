@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { api, API_URL, Product, Category } from "@/lib/api";
+import { api, imageUrl, Product, Category } from "@/lib/api";
 import { StockBadge } from "@/components/ui/StockBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -196,7 +196,7 @@ export default function HomePage() {
                 className="card group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-100 flex flex-col">
                 <div className="relative aspect-square overflow-hidden" style={{ background: "#f1f5f9" }}>
                   {product.images?.[0] ? (
-                    <Image src={`${API_URL}${product.images[0].url}`}
+                    <Image src={imageUrl(product.images[0].url)!}
                       alt={product.name || "Product"} fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       unoptimized />

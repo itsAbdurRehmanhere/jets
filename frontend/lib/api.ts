@@ -3,6 +3,14 @@ export const API_URL = typeof window !== "undefined" && window.location.protocol
   ? _rawApiUrl.replace(/^http:\/\//, "https://")
   : _rawApiUrl;
 
+// Resolve a product image URL. Supabase returns absolute https URLs (use as-is);
+// legacy server-disk images were stored as relative "/media/..." paths.
+export function imageUrl(url?: string | null): string | null {
+  if (!url) return null;
+  if (/^https?:\/\//i.test(url)) return url;
+  return `${API_URL}${url}`;
+}
+
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("access_token");

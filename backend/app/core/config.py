@@ -22,3 +22,8 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 # EasyPaisa merchant credentials
 EASYPAISA_STORE_ID = os.getenv("EASYPAISA_STORE_ID", "")
 EASYPAISA_HASH_KEY = os.getenv("EASYPAISA_HASH_KEY", "")
+
+# Supabase Storage (product images)
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "product-images")

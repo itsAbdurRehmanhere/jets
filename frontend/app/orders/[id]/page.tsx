@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { api, API_URL, Order } from "@/lib/api";
+import { api, imageUrl, Order } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -125,7 +125,7 @@ function OrderDetailContent() {
               <div key={item.id} className="flex gap-4 items-center">
                 <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0" style={{ background: "#f1f5f9" }}>
                   {item.product?.images?.[0] ? (
-                    <Image src={`${API_URL}${item.product.images[0].url}`} alt={item.product_name} fill className="object-cover" />
+                    <Image src={imageUrl(item.product.images[0].url)!} alt={item.product_name} fill className="object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xl opacity-20">✈</div>
                   )}

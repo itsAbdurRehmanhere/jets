@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { AuthGuard } from "@/components/ui/AuthGuard";
-import { API_URL } from "@/lib/api";
+import { imageUrl } from "@/lib/api";
 
 export default function CartPage() {
   const { cartItems, totalItems, totalPrice, updateItem, removeItem, clearCart, loading } = useCart();
@@ -55,7 +55,7 @@ export default function CartPage() {
                 <Link href={`/products/${item.product_id}`}
                   className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ background: "#f1f5f9" }}>
                   {item.product?.images?.[0] ? (
-                    <Image src={`${API_URL}${item.product.images[0].url}`} alt={item.product.name} fill className="object-cover" />
+                    <Image src={imageUrl(item.product.images[0].url)!} alt={item.product.name} fill className="object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-2xl opacity-20">✈</div>
                   )}

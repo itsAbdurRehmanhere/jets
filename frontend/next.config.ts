@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         hostname: "jets-production.up.railway.app",
         pathname: "/media/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 };
